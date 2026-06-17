@@ -4,6 +4,8 @@ import Link from "next/link";
 import UUIDCompat from "@/components/UUIDCompat";
 import Gatekeeper from "@/components/Gatekeeper";
 import MobileNav from "@/components/MobileNav";
+import { JoinModalProvider } from "@/components/JoinModalProvider";
+import { JoinRequestModal } from "@/components/JoinRequestModal";
 import "./globals.css";
 
 const openSans = Open_Sans({
@@ -102,8 +104,10 @@ export default function RootLayout({
           跳到正文
         </a>
         <Gatekeeper initialIsVerified={false}>
-          <UUIDCompat />
-          <div className="relative min-h-screen overflow-hidden bg-gradient-to-b from-[#FAF5FF] to-[#F3E8FF]">
+          <JoinModalProvider>
+            <UUIDCompat />
+            <JoinRequestModal />
+            <div className="relative min-h-screen overflow-hidden bg-gradient-to-b from-[#FAF5FF] to-[#F3E8FF]">
             {/* 导航栏 */}
             <header className="glass sticky top-0 z-50 border-b border-[#7C3AED]/10 transition-colors duration-300 hover:border-[#7C3AED]/20">
               <div className="mx-auto flex h-[68px] max-w-[1320px] items-center justify-between px-5 md:px-8 xl:px-10">
@@ -146,6 +150,7 @@ export default function RootLayout({
               </div>
             </footer>
           </div>
+          </JoinModalProvider>
         </Gatekeeper>
       </body>
     </html>

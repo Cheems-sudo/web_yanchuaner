@@ -125,8 +125,9 @@
     border: 1px solid #E2E8F0;
     border-radius: 8px;
     font-size: 16px;
-    transition: border-color 200ms ease, box-shadow 200ms ease;
     background: white;
+    color: var(--color-text);
+    transition: border-color 200ms ease, box-shadow 200ms ease;
   }
 
   .input:focus {
