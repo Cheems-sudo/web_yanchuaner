@@ -11,8 +11,13 @@ const CosmicBackground = memo(function CosmicBackground() {
   return (
     <div
       aria-hidden="true"
-      className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_20%_10%,rgba(124,58,237,0.10),transparent_45%),radial-gradient(circle_at_80%_90%,rgba(167,139,250,0.12),transparent_50%)]"
-    />
+      className="pointer-events-none absolute inset-0 overflow-hidden"
+    >
+      {/* 渐变星云光晕 */}
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_10%,rgba(124,58,237,0.12),transparent_45%),radial-gradient(circle_at_80%_90%,rgba(167,139,250,0.15),transparent_50%)]" />
+      {/* 动态流星扫过层 */}
+      <div className="meteor-layer absolute inset-0 opacity-[0.15]" />
+    </div>
   );
 });
 

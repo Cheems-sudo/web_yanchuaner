@@ -44,16 +44,17 @@ export default async function EventsPage() {
                 const registrationCount = event._count.registrations;
 
                 return (
-                  <article
+                  <GlassCard
                     key={event.id}
-                    className={`card flex flex-col overflow-hidden p-5 transition hover:-translate-y-1 hover:shadow-md ${
+                    as="article"
+                    className={`flex flex-col overflow-hidden p-5 ${
                       isPast
-                        ? "border-gray-200 bg-gray-50 opacity-70 hover:shadow-none hover:-translate-y-0"
-                        : "border-gray-200 bg-surface hover:border-brand/30"
+                        ? "opacity-60 bg-gray-50/50"
+                        : ""
                     }`}
                   >
                     {event.coverImage && (
-                      <div className="relative -mx-5 -mt-5 mb-4 aspect-video overflow-hidden border-b border-gray-100">
+                      <div className="relative -mx-5 -mt-5 mb-4 aspect-video overflow-hidden border-b border-brand/10">
                         <Image
                           src={event.coverImage}
                           alt={event.title}
@@ -64,8 +65,8 @@ export default async function EventsPage() {
                       </div>
                     )}
                     <div className="mb-3 flex items-center justify-between gap-2">
-                      <span className={`inline-flex items-center rounded-full px-2.5 py-1 text-xs ${
-                        isPast ? "border border-gray-300 text-gray-500 bg-surface" : "border border-brand/20 bg-brand/10 text-brand"
+                      <span className={`inline-flex items-center rounded-full px-2.5 py-1 text-xs border ${
+                        isPast ? "border-gray-300 text-gray-500 bg-white/40" : "border-brand/20 bg-brand/10 text-brand"
                       }`}>
                         {isPast ? "已结束" : "报名中"}
                       </span>
@@ -98,7 +99,7 @@ export default async function EventsPage() {
                         </ButtonLink>
                       </div>
                     )}
-                  </article>
+                  </GlassCard>
                 );
               })}
             </div>

@@ -12,6 +12,7 @@ import {
   Newspaper,
   CalendarDays,
 } from "lucide-react";
+import { RevealSection } from "@/components/ui";
 import MessageOrbit from "@/components/MessageOrbit";
 import CosmicBackground from "@/components/CosmicBackground";
 import { JoinTriggerButton } from "@/components/JoinRequestModal";
@@ -207,194 +208,223 @@ export default async function HomePage() {
           </div> : null}
         </header>
 
-        <div className="h-12 overflow-hidden rounded-full border border-[#A78BFA]/30 bg-white/70 shadow-sm backdrop-blur-sm">
-          <div className="announcement-marquee-track h-full">
-            <span className="inline-flex h-full items-center px-6 text-sm font-medium text-[#4C1D95]">
-              {HOME_ANNOUNCEMENT_TEXT}
-            </span>
-            <span
-              aria-hidden="true"
-              className="inline-flex h-full items-center px-6 text-sm font-medium text-[#4C1D95]"
-            >
-              {HOME_ANNOUNCEMENT_TEXT}
-            </span>
+        <RevealSection>
+          <div className="h-12 overflow-hidden rounded-full border border-[#A78BFA]/30 bg-white/70 shadow-sm backdrop-blur-sm">
+            <div className="announcement-marquee-track h-full">
+              <span className="inline-flex h-full items-center px-6 text-sm font-medium text-[#4C1D95]">
+                {HOME_ANNOUNCEMENT_TEXT}
+              </span>
+              <span
+                aria-hidden="true"
+                className="inline-flex h-full items-center px-6 text-sm font-medium text-[#4C1D95]"
+              >
+                {HOME_ANNOUNCEMENT_TEXT}
+              </span>
+            </div>
           </div>
-        </div>
+        </RevealSection>
 
         {/* 2. Popular topics/categories */}
         <section className="flex flex-col gap-6">
-          <h2 className="font-heading text-2xl font-bold text-[#4C1D95] flex items-center gap-3">
-            <Users className="text-[#7C3AED]" size={28} />
-            热门频道
-          </h2>
-          <div className="stagger-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            <Link
-              href="/news"
-              className="card glass-card-base group flex flex-col items-start rounded-2xl border border-[#A78BFA]/20 bg-white/60 p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-[#7C3AED]/40 hover:bg-white hover:shadow-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-[#7C3AED] focus-visible:ring-offset-2 focus-visible:ring-offset-[#FAF5FF]"
-            >
-              <span className="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-[#7C3AED]/10 text-[#7C3AED] transition-colors group-hover:bg-[#7C3AED] group-hover:text-white">
-                <Newspaper size={24} />
-              </span>
-              <h3 className="mt-4 font-heading text-lg font-bold text-slate-800">
-                最新公告
-              </h3>
-              <p className="mt-2 text-sm text-slate-500">
-                了解母校与校友会的最新动态
-              </p>
-            </Link>
-            <Link
-              href="/events"
-              className="card glass-card-base group flex flex-col items-start rounded-2xl border border-[#A78BFA]/20 bg-white/60 p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-[#7C3AED]/40 hover:bg-white hover:shadow-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-[#7C3AED] focus-visible:ring-offset-2 focus-visible:ring-offset-[#FAF5FF]"
-            >
-              <span className="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-[#7C3AED]/10 text-[#7C3AED] transition-colors group-hover:bg-[#7C3AED] group-hover:text-white">
-                <CalendarDays size={24} />
-              </span>
-              <h3 className="mt-4 font-heading text-lg font-bold text-slate-800">
-                校友活动
-              </h3>
-              <p className="mt-2 text-sm text-slate-500">
-                参与线上线下交流与聚会
-              </p>
-            </Link>
-            <Link
-              href="/alumni/stories"
-              className="card glass-card-base group flex flex-col items-start rounded-2xl border border-[#A78BFA]/20 bg-white/60 p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-[#7C3AED]/40 hover:bg-white hover:shadow-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-[#7C3AED] focus-visible:ring-offset-2 focus-visible:ring-offset-[#FAF5FF]"
-            >
-              <span className="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-[#7C3AED]/10 text-[#7C3AED] transition-colors group-hover:bg-[#7C3AED] group-hover:text-white">
-                <MessageSquareText size={24} />
-              </span>
-              <h3 className="mt-4 font-heading text-lg font-bold text-slate-800">
-                燕中故事
-              </h3>
-              <p className="mt-2 text-sm text-slate-500">
-                倾听校友们的奋斗与成长
-              </p>
-            </Link>
-            <Link
-              href="/alumni/memories"
-              className="card glass-card-base group flex flex-col items-start rounded-2xl border border-[#A78BFA]/20 bg-white/60 p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-[#7C3AED]/40 hover:bg-white hover:shadow-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-[#7C3AED] focus-visible:ring-offset-2 focus-visible:ring-offset-[#FAF5FF]"
-            >
-              <span className="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-[#7C3AED]/10 text-[#7C3AED] transition-colors group-hover:bg-[#7C3AED] group-hover:text-white">
-                <GalleryVerticalEnd size={24} />
-              </span>
-              <h3 className="mt-4 font-heading text-lg font-bold text-slate-800">
-                燕中记忆
-              </h3>
-              <p className="mt-2 text-sm text-slate-500">
-                重温校园时光的珍贵影像
-              </p>
-            </Link>
+          <RevealSection>
+            <h2 className="font-heading text-2xl font-bold text-[#4C1D95] flex items-center gap-3">
+              <Users className="text-[#7C3AED]" size={28} />
+              热门频道
+            </h2>
+          </RevealSection>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <RevealSection delay={0} className="h-full flex flex-col">
+              <Link
+                href="/news"
+                className="card h-full w-full glass-card-base group flex flex-col items-start rounded-2xl border border-[#A78BFA]/20 bg-white/60 p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-[#7C3AED]/40 hover:bg-white hover:shadow-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-[#7C3AED] focus-visible:ring-offset-2 focus-visible:ring-offset-[#FAF5FF]"
+              >
+                <span className="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-[#7C3AED]/10 text-[#7C3AED] transition-colors group-hover:bg-[#7C3AED] group-hover:text-white">
+                  <Newspaper size={24} />
+                </span>
+                <h3 className="mt-4 font-heading text-lg font-bold text-slate-800">
+                  最新公告
+                </h3>
+                <p className="mt-2 text-sm text-slate-500">
+                  了解母校与校友会的最新动态
+                </p>
+              </Link>
+            </RevealSection>
+            <RevealSection delay={0.1} className="h-full flex flex-col">
+              <Link
+                href="/events"
+                className="card h-full w-full glass-card-base group flex flex-col items-start rounded-2xl border border-[#A78BFA]/20 bg-white/60 p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-[#7C3AED]/40 hover:bg-white hover:shadow-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-[#7C3AED] focus-visible:ring-offset-2 focus-visible:ring-offset-[#FAF5FF]"
+              >
+                <span className="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-[#7C3AED]/10 text-[#7C3AED] transition-colors group-hover:bg-[#7C3AED] group-hover:text-white">
+                  <CalendarDays size={24} />
+                </span>
+                <h3 className="mt-4 font-heading text-lg font-bold text-slate-800">
+                  校友活动
+                </h3>
+                <p className="mt-2 text-sm text-slate-500">
+                  参与线上线下交流与聚会
+                </p>
+              </Link>
+            </RevealSection>
+            <RevealSection delay={0.2} className="h-full flex flex-col">
+              <Link
+                href="/alumni/stories"
+                className="card h-full w-full glass-card-base group flex flex-col items-start rounded-2xl border border-[#A78BFA]/20 bg-white/60 p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-[#7C3AED]/40 hover:bg-white hover:shadow-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-[#7C3AED] focus-visible:ring-offset-2 focus-visible:ring-offset-[#FAF5FF]"
+              >
+                <span className="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-[#7C3AED]/10 text-[#7C3AED] transition-colors group-hover:bg-[#7C3AED] group-hover:text-white">
+                  <MessageSquareText size={24} />
+                </span>
+                <h3 className="mt-4 font-heading text-lg font-bold text-slate-800">
+                  燕中故事
+                </h3>
+                <p className="mt-2 text-sm text-slate-500">
+                  倾听校友们的奋斗与成长
+                </p>
+              </Link>
+            </RevealSection>
+            <RevealSection delay={0.3} className="h-full flex flex-col">
+              <Link
+                href="/alumni/memories"
+                className="card h-full w-full glass-card-base group flex flex-col items-start rounded-2xl border border-[#A78BFA]/20 bg-white/60 p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-[#7C3AED]/40 hover:bg-white hover:shadow-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-[#7C3AED] focus-visible:ring-offset-2 focus-visible:ring-offset-[#FAF5FF]"
+              >
+                <span className="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-[#7C3AED]/10 text-[#7C3AED] transition-colors group-hover:bg-[#7C3AED] group-hover:text-white">
+                  <GalleryVerticalEnd size={24} />
+                </span>
+                <h3 className="mt-4 font-heading text-lg font-bold text-slate-800">
+                  燕中记忆
+                </h3>
+                <p className="mt-2 text-sm text-slate-500">
+                  重温校园时光的珍贵影像
+                </p>
+              </Link>
+            </RevealSection>
           </div>
         </section>
 
         {/* Latest Updates Section — streamed via Suspense */}
-        {canViewPrivate ? <section className="glass-card-base rounded-3xl border border-[#A78BFA]/20 bg-white/50 p-6 md:p-8 backdrop-blur-xl shadow-sm">
-          <div className="mb-6 flex items-center gap-3">
-            <Newspaper size={28} className="text-[#7C3AED]" />
-            <h2 className="font-heading text-2xl font-bold text-[#4C1D95]">
-              最新动态
-            </h2>
-          </div>
-          <Suspense fallback={<LatestUpdatesSkeleton />}>
-            <LatestUpdatesSection />
-          </Suspense>
-        </section> : null}
+        {canViewPrivate ? (
+          <RevealSection>
+            <section className="glass-card-base rounded-3xl border border-[#A78BFA]/20 bg-white/50 p-6 md:p-8 backdrop-blur-xl shadow-sm">
+              <div className="mb-6 flex items-center gap-3">
+                <Newspaper size={28} className="text-[#7C3AED]" />
+                <h2 className="font-heading text-2xl font-bold text-[#4C1D95]">
+                  最新动态
+                </h2>
+              </div>
+              <Suspense fallback={<LatestUpdatesSkeleton />}>
+                <LatestUpdatesSection />
+              </Suspense>
+            </section>
+          </RevealSection>
+        ) : null}
 
         {/* 3. Active members showcase — map loaded via Suspense */}
-        <section className="glass-card-base rounded-3xl border border-[#A78BFA]/20 bg-white/50 p-6 md:p-8 backdrop-blur-xl shadow-sm">
-          <div className="mb-6 flex items-center justify-between gap-4">
-            <div className="flex items-center gap-3">
-              <MapPin size={28} className="text-[#7C3AED]" />
-              <h2 className="font-heading text-2xl font-bold text-[#4C1D95]">
-                校友分布与活跃成员
-              </h2>
-            </div>
-            <Link
-              href="/alumni/radar"
-              className="text-sm font-medium text-[#7C3AED] hover:text-[#4C1D95] transition-colors"
-            >
-              查看完整名录 &rarr;
-            </Link>
-          </div>
-          <div className="rounded-2xl overflow-hidden border border-[#A78BFA]/20 bg-white shadow-sm">
-            {canViewPrivate ? <AlumniMap /> : (
-              <div className="rounded-2xl border border-brand/15 bg-white/60 p-8 text-center text-sm text-brand-fg/60">
-                登录并通过校友认证后可查看校友分布。
+        <RevealSection direction="scale">
+          <section className="glass-card-base rounded-3xl border border-[#A78BFA]/20 bg-white/50 p-6 md:p-8 backdrop-blur-xl shadow-sm">
+            <div className="mb-6 flex items-center justify-between gap-4">
+              <div className="flex items-center gap-3">
+                <MapPin size={28} className="text-[#7C3AED]" />
+                <h2 className="font-heading text-2xl font-bold text-[#4C1D95]">
+                  校友分布与活跃成员
+                </h2>
               </div>
-            )}
-          </div>
-        </section>
+              <Link
+                href="/alumni/radar"
+                className="text-sm font-medium text-[#7C3AED] hover:text-[#4C1D95] transition-colors"
+              >
+                查看完整名录 &rarr;
+              </Link>
+            </div>
+            <div className="rounded-2xl overflow-hidden border border-[#A78BFA]/20 bg-white shadow-sm">
+              {canViewPrivate ? <AlumniMap /> : (
+                <div className="rounded-2xl border border-brand/15 bg-white/60 p-8 text-center text-sm text-brand-fg/60">
+                  登录并通过校友认证后可查看校友分布。
+                </div>
+              )}
+            </div>
+          </section>
+        </RevealSection>
 
         <section
           id="builders"
           className="glass-card-base rounded-3xl border border-[#A78BFA]/20 bg-white/50 p-6 md:p-8 backdrop-blur-xl shadow-sm"
         >
-          <div className="mb-8 flex items-center justify-between gap-3">
-            <div>
-              <p className="text-sm font-semibold uppercase tracking-widest text-[#7C3AED]">
-                CO-BUILDERS
-              </p>
-              <h2 className="mt-2 font-heading text-3xl font-bold text-[#4C1D95] md:text-4xl">
-                平台共建者
-              </h2>
+          <RevealSection>
+            <div className="mb-8 flex items-center justify-between gap-3">
+              <div>
+                <p className="text-sm font-semibold uppercase tracking-widest text-[#7C3AED]">
+                  CO-BUILDERS
+                </p>
+                <h2 className="mt-2 font-heading text-3xl font-bold text-[#4C1D95] md:text-4xl">
+                  平台共建者
+                </h2>
+              </div>
+              <a
+                href="#top"
+                aria-label="返回顶部"
+                tabIndex={0}
+                className="rounded-full border border-[#A78BFA]/30 bg-white px-4 py-2 text-sm font-medium text-[#7C3AED] hover:bg-[#F3E8FF] transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#7C3AED] focus-visible:ring-offset-2 focus-visible:ring-offset-[#FAF5FF]"
+              >
+                返回顶部
+              </a>
             </div>
-            <a
-              href="#top"
-              aria-label="返回顶部"
-              tabIndex={0}
-              className="rounded-full border border-[#A78BFA]/30 bg-white px-4 py-2 text-sm font-medium text-[#7C3AED] hover:bg-[#F3E8FF] transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#7C3AED] focus-visible:ring-offset-2 focus-visible:ring-offset-[#FAF5FF]"
-            >
-              返回顶部
-            </a>
-          </div>
+          </RevealSection>
 
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            {coBuilders.map((member) => (
-              <article
+            {coBuilders.map((member, i) => (
+              <RevealSection
                 key={`${member.name}-${member.university}`}
-                className="card rounded-2xl border border-[#A78BFA]/20 bg-white/70 p-5 shadow-sm hover:shadow-md transition-shadow"
+                delay={i * 0.08}
+                className="h-full flex flex-col"
               >
-                <p className="font-heading text-lg font-bold text-slate-800">
-                  {member.name}
-                </p>
-                <p className="mt-1 text-sm font-medium text-[#7C3AED]">
-                  {member.role}
-                </p>
-                <p className="mt-3 text-sm text-slate-600">
-                  {member.university}
-                </p>
-                <p className="mt-3 inline-block rounded-lg bg-[#F3E8FF] px-3 py-1.5 text-xs font-medium text-[#4C1D95]">
-                  {member.focus}
-                </p>
-                <p className="mt-3 text-sm text-slate-500">
-                  城市：{member.city}
-                </p>
-              </article>
+                <article
+                  className="card h-full w-full rounded-2xl border border-[#A78BFA]/20 bg-white/70 p-5 shadow-sm hover:shadow-md transition-shadow"
+                >
+                  <p className="font-heading text-lg font-bold text-slate-800">
+                    {member.name}
+                  </p>
+                  <p className="mt-1 text-sm font-medium text-[#7C3AED]">
+                    {member.role}
+                  </p>
+                  <p className="mt-3 text-sm text-slate-600">
+                    {member.university}
+                  </p>
+                  <p className="mt-3 inline-block rounded-lg bg-[#F3E8FF] px-3 py-1.5 text-xs font-medium text-[#4C1D95]">
+                    {member.focus}
+                  </p>
+                  <p className="mt-3 text-sm text-slate-500">
+                    城市：{member.city}
+                  </p>
+                </article>
+              </RevealSection>
             ))}
           </div>
         </section>
 
         {!currentUser ? (
           /* 4. Join CTA */
-          <section className="relative overflow-hidden rounded-3xl bg-[#7C3AED] px-6 py-16 text-center shadow-xl md:px-12 md:py-20">
-            <div className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_center,white_0%,transparent_100%)]"></div>
-            <div className="relative z-10 mx-auto max-w-2xl text-white">
-              <h2 className="font-heading text-3xl font-bold md:text-4xl">
-                加入我们的校友网络
-              </h2>
-              <p className="mt-4 text-lg text-white/90">
-                结识优秀的校友，分享你的经历，获取更多资源与机会。无论你身在何处，这里都是你的精神家园。
-              </p>
-              <div className="mt-8 flex justify-center">
-                <JoinTriggerButton />
+          <RevealSection direction="scale">
+            <section className="relative overflow-hidden rounded-3xl bg-[#7C3AED] px-6 py-16 text-center shadow-xl md:px-12 md:py-20">
+              <div className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_center,white_0%,transparent_100%)]"></div>
+              <div className="relative z-10 mx-auto max-w-2xl text-white">
+                <h2 className="font-heading text-3xl font-bold md:text-4xl">
+                  加入我们的校友网络
+                </h2>
+                <p className="mt-4 text-lg text-white/90">
+                  结识优秀的校友，分享你的经历，获取更多资源与机会。无论你身在何处，这里都是你的精神家园。
+                </p>
+                <div className="mt-8 flex justify-center">
+                  <JoinTriggerButton />
+                </div>
               </div>
-            </div>
-          </section>
+            </section>
+          </RevealSection>
         ) : null}
 
-        <div className="mt-8 rounded-xl border border-amber-300/50 bg-amber-50 px-4 py-3 text-sm font-medium text-amber-800 shadow-sm">
-          声明：本站为个人发起的公益站点，非任何官方机构。全站无盈利、不收费，仅供情感连接、记忆留存与校友社区服务。
-        </div>
+        <RevealSection>
+          <div className="mt-8 rounded-xl border border-amber-300/50 bg-amber-50 px-4 py-3 text-sm font-medium text-amber-800 shadow-sm">
+            声明：本站为个人发起的公益站点，非任何官方机构。全站无盈利、不收费，仅供情感连接、记忆留存与校友社区服务。
+          </div>
+        </RevealSection>
       </div>
     </section>
   );

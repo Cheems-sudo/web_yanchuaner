@@ -1,9 +1,10 @@
 "use client";
 
-import Link from "next/link";
 import { FormEvent, useState } from "react";
+import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useAuth } from "@/components/AuthProvider";
+import { PageShell, GlassCard, Button } from "@/components/ui";
 
 function safeRedirect(value: string | null, fallback: string) {
   return value &&
@@ -52,8 +53,8 @@ export default function LoginPage() {
   }
 
   return (
-    <section className="mx-auto flex min-h-[70vh] max-w-md items-center px-4 py-12">
-      <div className="w-full rounded-2xl border border-brand/15 bg-white/75 p-7 shadow-sm backdrop-blur-xl">
+    <PageShell size="narrow" className="flex min-h-[70vh] items-center">
+      <GlassCard className="w-full p-7">
         <h1 className="text-2xl font-bold text-brand-fg">登录</h1>
         <p className="mt-2 text-sm text-brand-fg/60">使用个人账号进入燕中数字母港。</p>
         <form onSubmit={submit} className="mt-6 space-y-4">
@@ -71,15 +72,15 @@ export default function LoginPage() {
               重发验证邮件
             </Link>
           ) : null}
-          <button className="btn-primary w-full" disabled={loading}>
+          <Button type="submit" variant="primary" className="w-full mt-2" disabled={loading}>
             {loading ? "登录中…" : "登录"}
-          </button>
+          </Button>
         </form>
-        <div className="mt-5 flex justify-between text-sm">
-          <Link href="/register" className="text-brand">注册账号</Link>
-          <Link href="/reset-password" className="text-brand">忘记密码</Link>
+        <div className="mt-6 flex justify-between text-sm">
+          <Link href="/register" className="text-brand hover:text-brand-fg transition-colors">注册账号</Link>
+          <Link href="/reset-password" className="text-brand hover:text-brand-fg transition-colors">忘记密码</Link>
         </div>
-      </div>
-    </section>
+      </GlassCard>
+    </PageShell>
   );
 }

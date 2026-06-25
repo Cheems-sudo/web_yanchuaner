@@ -6,23 +6,23 @@
 
 @layer base {
   :root {
-    /* ── 颜色令牌（设计系统单一来源）──────────────── */
-    --color-primary: #7C3AED;     /* 主色 - 紫 */
-    --color-secondary: #A78BFA;   /* 辅色 - 淡紫 */
+    /* ── 颜色令牌（升级为宇宙科幻深色模式）──────────────── */
+    --color-primary: #A78BFA;     /* 主色 - 柔和紫 */
+    --color-secondary: #C084FC;   /* 辅色 - 亮紫 */
     --color-cta: #22C55E;         /* CTA - 绿 */
-    --color-background: #FAF5FF;  /* 页面背景 - 浅紫 */
-    --color-surface: #FFFFFF;     /* 卡片表面 - 白 */
-    --color-text: #4C1D95;        /* 主文本 - 深紫 */
-    --color-line: rgba(124, 58, 237, 0.1); /* 统一描边色 */
+    --color-background: #03010b;  /* 页面背景 - 宇宙深空黑 */
+    --color-surface: rgba(13, 9, 36, 0.65); /* 卡片表面 - 暗紫磨砂玻璃 */
+    --color-text: #F5F3FF;        /* 主文本 - 极淡紫白 */
+    --color-line: rgba(167, 139, 250, 0.15); /* 统一描边色 */
+    --color-bg-gradient-end: #0c0822; /* 渐变结束 - 深空暗蓝 */
 
-    /* RGB 通道变量：供 Tailwind 语义令牌支持透明度修饰符（如 bg-brand/10）。
-       与上方十六进制变量保持同色，十六进制供 globals.css 内原生 CSS 使用。 */
-    --brand-rgb: 124 58 237;       /* #7C3AED */
-    --brand-soft-rgb: 167 139 250; /* #A78BFA */
-    --brand-fg-rgb: 76 29 149;     /* #4C1D95 */
+    /* RGB 通道变量：供 Tailwind 语义令牌支持透明度修饰符 */
+    --brand-rgb: 167 139 250;       /* #A78BFA */
+    --brand-soft-rgb: 192 132 252; /* #C084FC */
+    --brand-fg-rgb: 245 243 255;   /* #F5F3FF */
     --accent-rgb: 34 197 94;       /* #22C55E */
-    --surface-rgb: 255 255 255;    /* #FFFFFF */
-    --surface-muted-rgb: 250 245 255; /* #FAF5FF */
+    --surface-rgb: 13 9 36;        /* #0D0924 */
+    --surface-muted-rgb: 3 1 11;   /* #03010B */
 
     /* Spacing Variables */
     --space-xs: 4px;
@@ -34,16 +34,16 @@
     --space-3xl: 64px;
 
     /* Shadow Depths */
-    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
-    --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
-    --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
-    --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.15);
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 4px 20px rgba(124, 58, 237, 0.15);
+    --shadow-lg: 0 12px 36px rgba(124, 58, 237, 0.25);
+    --shadow-xl: 0 20px 50px rgba(0, 0, 0, 0.5);
 
     /* Legacy Variables Repurposed */
-    --cosmic-deep: #F3E8FF;
-    --cosmic-mid: #FAF5FF;
-    --glass-bg: rgba(250, 245, 255, 0.65);
-    --glass-border: rgba(167, 139, 250, 0.25);
+    --cosmic-deep: #03010b;
+    --cosmic-mid: #0a0620;
+    --glass-bg: rgba(13, 9, 36, 0.65);
+    --glass-border: rgba(167, 139, 250, 0.15);
   }
 
   * {
@@ -137,11 +137,70 @@
   }
 
   .glass-card-base {
-    @apply relative rounded-card border border-line bg-surface/60 backdrop-blur-xl shadow-sm p-6 transition-all duration-300 hover:border-brand/30 hover:shadow-md;
+    @apply relative rounded-card border border-line bg-surface/60 backdrop-blur-xl shadow-sm p-6;
+    transition: transform 400ms cubic-bezier(0.16, 1, 0.3, 1), border-color 400ms cubic-bezier(0.16, 1, 0.3, 1), box-shadow 400ms cubic-bezier(0.16, 1, 0.3, 1);
     &:focus { outline: none; }
     &:focus-visible {
       @apply ring-2 ring-brand ring-offset-2 ring-offset-surface-muted;
     }
+  }
+
+  .glass-card-base:hover {
+    @apply border-brand/20 shadow-md;
+    transform: translateY(-2px) scale(1.005);
+  }
+
+  .glass-card-premium {
+    position: relative;
+    overflow: hidden;
+    border-radius: 1rem;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    background-color: rgba(13, 9, 36, 0.65) !important;
+    backdrop-filter: blur(16px);
+    transition: all 400ms cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+  }
+
+  .glass-card-premium:hover {
+    transform: translateY(-4px);
+    border-color: rgba(167, 139, 250, 0.25);
+    box-shadow: 0 12px 40px rgba(124, 58, 237, 0.15);
+  }
+
+  .glass-card-premium::before {
+    content: "";
+    pointer-events: none;
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background: radial-gradient(
+      350px circle at var(--mouse-x, -1000px) var(--mouse-y, -1000px),
+      rgba(167, 139, 250, 0.15),
+      transparent 40%
+    );
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+  }
+
+  .glass-card-glow {
+    pointer-events: none;
+    position: absolute;
+    inset: -1px;
+    border-radius: inherit;
+    opacity: 0;
+    transition: opacity 300ms ease;
+    background: radial-gradient(
+      600px circle at var(--mouse-x, -1000px) var(--mouse-y, -1000px),
+      rgba(167, 139, 250, 0.08),
+      transparent 40%
+    );
+  }
+
+  .glass-card-premium:hover .glass-card-glow {
+    opacity: 1;
   }
 }
 
@@ -178,69 +237,7 @@ body::after {
   animation: nebula-drift-purple 52s ease-in-out infinite;
 }
 
-/* Starfield repainted for light theme */
-.starfield {
-  position: absolute;
-  inset: 0;
-  background-repeat: repeat;
-  background-image:
-    radial-gradient(2.5px 2.5px at 6% 14%, rgba(124, 58, 237, 0.2), transparent 64%),
-    radial-gradient(2.5px 2.5px at 12% 38%, rgba(124, 58, 237, 0.15), transparent 64%),
-    radial-gradient(2.5px 2.5px at 18% 72%, rgba(167, 139, 250, 0.2), transparent 64%),
-    radial-gradient(2.5px 2.5px at 25% 28%, rgba(124, 58, 237, 0.1), transparent 64%),
-    radial-gradient(2.5px 2.5px at 31% 56%, rgba(167, 139, 250, 0.2), transparent 64%),
-    radial-gradient(2.5px 2.5px at 38% 9%, rgba(124, 58, 237, 0.15), transparent 64%),
-    radial-gradient(2.5px 2.5px at 44% 83%, rgba(167, 139, 250, 0.2), transparent 64%),
-    radial-gradient(2.5px 2.5px at 51% 41%, rgba(124, 58, 237, 0.1), transparent 64%),
-    radial-gradient(2.5px 2.5px at 57% 67%, rgba(167, 139, 250, 0.15), transparent 64%),
-    radial-gradient(2.5px 2.5px at 64% 22%, rgba(124, 58, 237, 0.2), transparent 64%),
-    radial-gradient(2.5px 2.5px at 71% 49%, rgba(167, 139, 250, 0.1), transparent 64%),
-    radial-gradient(2.5px 2.5px at 78% 79%, rgba(124, 58, 237, 0.2), transparent 64%),
-    radial-gradient(2.5px 2.5px at 85% 33%, rgba(167, 139, 250, 0.15), transparent 64%),
-    radial-gradient(2.5px 2.5px at 93% 61%, rgba(124, 58, 237, 0.1), transparent 64%);
-  animation:
-    parallax-stars 26s ease-in-out infinite,
-    star-breathe 5s ease-in-out infinite;
-}
 
-.starfield::before,
-.starfield::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background-repeat: no-repeat;
-  pointer-events: none;
-}
-
-.starfield::before {
-  background-repeat: repeat;
-  background-image:
-    radial-gradient(4px 4px at 5% 21%, rgba(124, 58, 237, 0.15), transparent 64%),
-    radial-gradient(4px 4px at 11% 48%, rgba(167, 139, 250, 0.1), transparent 64%),
-    radial-gradient(4px 4px at 16% 78%, rgba(124, 58, 237, 0.2), transparent 64%),
-    radial-gradient(4px 4px at 22% 35%, rgba(167, 139, 250, 0.15), transparent 64%),
-    radial-gradient(4px 4px at 28% 58%, rgba(124, 58, 237, 0.1), transparent 64%),
-    radial-gradient(4px 4px at 34% 12%, rgba(167, 139, 250, 0.2), transparent 64%),
-    radial-gradient(4px 4px at 41% 84%, rgba(124, 58, 237, 0.15), transparent 64%),
-    radial-gradient(4px 4px at 47% 44%, rgba(167, 139, 250, 0.1), transparent 64%);
-  animation:
-    parallax-stars 34s ease-in-out infinite reverse,
-    star-breathe 5s ease-in-out infinite;
-}
-
-.starfield::after {
-  background-repeat: repeat;
-  background-image:
-    radial-gradient(6px 6px at 4% 16%, rgba(167, 139, 250, 0.1), transparent 64%),
-    radial-gradient(6px 6px at 9% 43%, rgba(124, 58, 237, 0.15), transparent 64%),
-    radial-gradient(6px 6px at 15% 71%, rgba(167, 139, 250, 0.2), transparent 64%),
-    radial-gradient(6px 6px at 20% 27%, rgba(124, 58, 237, 0.1), transparent 64%),
-    radial-gradient(6px 6px at 26% 57%, rgba(167, 139, 250, 0.15), transparent 64%);
-  animation:
-    parallax-stars 40s ease-in-out infinite,
-    star-breathe 5s ease-in-out infinite;
-  animation-delay: -1.8s;
-}
 
 .meteor-layer {
   position: absolute;
@@ -594,9 +591,6 @@ body::after {
 @media (prefers-reduced-motion: reduce) {
   body::before,
   body::after,
-  .starfield,
-  .starfield::before,
-  .starfield::after,
   .meteor-layer::before,
   .meteor-layer::after,
   .home-breath-stars,
@@ -727,10 +721,136 @@ body::after {
   body::after,
   .meteor-layer,
   .meteor-layer::before,
-  .meteor-layer::after,
-  .starfield,
-  .starfield::before,
-  .starfield::after {
+  .meteor-layer::after {
     animation: none !important;
   }
+}
+
+/* Disable CPU-heavy background animations on mobile devices for high performance scrolling */
+@media (max-width: 768px) {
+  body::before,
+  body::after,
+  .meteor-layer,
+  .meteor-layer::before,
+  .meteor-layer::after,
+  .home-atmo-layer,
+  .home-breath-stars {
+    animation: none !important;
+    display: none !important;
+  }
+}
+
+/* ==========================================================================
+   宇宙科幻深色模式全局兼容性覆盖器 (Cosmic Dark Mode Utility Overrides)
+   通过劫持 Tailwind 浅色辅助类，将全站一键升级为深邃星云配色，无需修改数百处 HTML
+   ========================================================================== */
+
+/* 1. 文本颜色劫持 */
+.text-slate-800,
+.text-slate-700,
+.text-gray-800,
+.text-gray-700,
+.text-slate-900,
+.text-slate-950 {
+  color: var(--color-text) !important;
+}
+
+.text-slate-600,
+.text-slate-500,
+.text-gray-600,
+.text-gray-500 {
+  color: rgba(245, 243, 255, 0.65) !important;
+}
+
+.text-slate-400,
+.text-gray-400 {
+  color: rgba(245, 243, 255, 0.45) !important;
+}
+
+/* 2. 背景与磨砂玻璃劫持 */
+.bg-white {
+  background-color: var(--color-surface) !important;
+}
+
+.bg-white\/80 {
+  background-color: rgba(13, 9, 36, 0.8) !important;
+}
+
+.bg-white\/70 {
+  background-color: rgba(13, 9, 36, 0.7) !important;
+}
+
+.bg-white\/60,
+.bg-surface\/60 {
+  background-color: rgba(13, 9, 36, 0.6) !important;
+}
+
+.bg-white\/50,
+.bg-white\/30,
+.bg-white\/40 {
+  background-color: rgba(13, 9, 36, 0.45) !important;
+}
+
+.bg-gray-50 {
+  background-color: rgba(13, 9, 36, 0.3) !important;
+}
+
+/* 3. 劫持硬编码的浅色品牌十六进制 */
+.text-\[\#7C3AED\] {
+  color: var(--color-primary) !important;
+}
+
+.text-\[\#4C1D95\] {
+  color: var(--color-text) !important;
+}
+
+.bg-\[\#7C3AED\]\/10 {
+  background-color: rgba(167, 139, 250, 0.15) !important;
+}
+
+.border-\[\#A78BFA\]\/20,
+.border-\[\#7C3AED\]\/10,
+.border-\[\#7C3AED\]\/20,
+.border-\[\#7C3AED\]\/5,
+.border-line {
+  border-color: var(--color-line) !important;
+}
+
+.bg-\[\#FAF5FF\],
+.from-\[\#FAF5FF\] {
+  --tw-gradient-from: var(--color-background) !important;
+  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, var(--color-bg-gradient-end)) !important;
+  background-color: var(--color-background) !important;
+}
+
+.to-\[\#F3E8FF\] {
+  --tw-gradient-to: var(--color-bg-gradient-end) !important;
+}
+
+/* 4. 输入框科幻适配 */
+.input {
+  border: 1px solid rgba(167, 139, 250, 0.2) !important;
+  background-color: rgba(4, 1, 13, 0.5) !important;
+  color: var(--color-text) !important;
+}
+
+.input:focus {
+  border-color: var(--color-primary) !important;
+  box-shadow: 0 0 0 3px rgba(167, 139, 250, 0.25) !important;
+}
+
+/* 5. 滚动条美化 */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: rgba(13, 9, 36, 0.3);
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(167, 139, 250, 0.3);
+  border-radius: 99px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(167, 139, 250, 0.5);
 }

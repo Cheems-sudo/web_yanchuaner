@@ -41,19 +41,19 @@ export default async function NewsPage() {
           ) : (
             <div className="grid gap-4 md:grid-cols-2">
               {news.map((item) => (
-                <article key={item.id} className="card group p-5 transition hover:border-brand/30 hover:shadow-md hover:-translate-y-1">
+                <GlassCard key={item.id} as="article" className="p-5">
                   <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-brand/20 bg-brand/10 px-2.5 py-1 text-xs text-brand">
                     <Calendar size={12} />
                     {item.publishedAt ? new Date(item.publishedAt).toLocaleDateString("zh-CN") : ""}
                   </div>
-                  <h2 className="font-heading text-lg font-semibold text-brand-fg transition group-hover:text-brand">{item.title}</h2>
+                  <h2 className="font-heading text-lg font-semibold text-brand-fg transition group-hover/card:text-brand">{item.title}</h2>
                   {item.summary && <p className="mt-2 text-sm leading-6 text-gray-700 line-clamp-2">{item.summary}</p>}
                   <Link href={`/news/${item.id}`}
                     className="mt-4 inline-flex items-center gap-1 text-sm text-brand transition hover:text-brand-fg focus-visible:ring-2 focus-visible:ring-brand focus:outline-none rounded"
                   >
                     阅读全文 <ArrowRight size={14} />
                   </Link>
-                </article>
+                </GlassCard>
               ))}
             </div>
           )}

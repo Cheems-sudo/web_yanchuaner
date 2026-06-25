@@ -16,8 +16,8 @@ const config: Config = {
   theme: {
     extend: {
       fontFamily: {
-        sans: ["var(--font-open-sans)", "var(--font-noto-sans-sc)", "sans-serif"],
-        heading: ["var(--font-poppins)", "var(--font-noto-sans-sc)", "sans-serif"],
+        sans: ["'Open Sans'", "'Noto Sans SC'", "system-ui", "-apple-system", "BlinkMacSystemFont", "'Segoe UI'", "Roboto", "sans-serif"],
+        heading: ["'Poppins'", "'Noto Sans SC'", "system-ui", "-apple-system", "BlinkMacSystemFont", "'Segoe UI'", "Roboto", "sans-serif"],
       },
       colors: {
         // ── 语义令牌（推荐使用，支持透明度修饰符如 bg-brand/10）──

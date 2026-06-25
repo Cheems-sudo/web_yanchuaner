@@ -16,3 +16,6 @@ export { Button, ButtonLink } from "./Button";
 export { Badge } from "./Badge";
 export { EmptyState } from "./EmptyState";
 export { DisclaimerBanner } from "./DisclaimerBanner";
+export { InteractiveStarfield } from "./InteractiveStarfield";
+export { RevealSection } from "./RevealSection";
+

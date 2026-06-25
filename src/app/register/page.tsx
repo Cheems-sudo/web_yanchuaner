@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { FormEvent, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
+import { PageShell, GlassCard, Button } from "@/components/ui";
 
 export default function RegisterPage() {
   const searchParams = useSearchParams();
@@ -52,8 +53,8 @@ export default function RegisterPage() {
   }
 
   return (
-    <section className="mx-auto max-w-2xl px-4 py-12">
-      <div className="rounded-2xl border border-brand/15 bg-white/75 p-7 shadow-sm backdrop-blur-xl">
+    <PageShell size="narrow">
+      <GlassCard className="p-7">
         <h1 className="text-2xl font-bold text-brand-fg">注册校友账号</h1>
         <p className="mt-2 text-sm text-brand-fg/60">加入数字母港。邮箱验证与校友认证相互独立。</p>
         <form onSubmit={submit} className="mt-6 grid gap-4 md:grid-cols-2">
@@ -74,10 +75,12 @@ export default function RegisterPage() {
           </label>
           {message ? <p className="text-sm text-emerald-700 md:col-span-2">{message}</p> : null}
           {error ? <p className="text-sm text-rose-600 md:col-span-2">{error}</p> : null}
-          <button className="btn-primary md:col-span-2" disabled={loading}>{loading ? "创建中…" : "创建账号"}</button>
+          <Button type="submit" variant="primary" className="md:col-span-2 mt-2" disabled={loading}>
+            {loading ? "创建中…" : "创建账号"}
+          </Button>
         </form>
-        <p className="mt-5 text-sm text-brand-fg/60">已有账号？ <Link href="/login" className="text-brand">去登录</Link></p>
-      </div>
-    </section>
+        <p className="mt-6 text-sm text-brand-fg/60">已有账号？ <Link href="/login" className="text-brand hover:text-brand-fg transition-colors">去登录</Link></p>
+      </GlassCard>
+    </PageShell>
   );
 }

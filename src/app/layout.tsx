@@ -1,30 +1,9 @@
 import type { Metadata } from "next";
-import { Open_Sans, Poppins, Noto_Sans_SC } from "next/font/google";
-import Link from "next/link";
 import UUIDCompat from "@/components/UUIDCompat";
-import MobileNav from "@/components/MobileNav";
 import AuthProvider from "@/components/AuthProvider";
+import Header from "@/components/Header";
+import { InteractiveStarfield } from "@/components/ui";
 import "./globals.css";
-
-const openSans = Open_Sans({
-  subsets: ["latin"],
-  variable: "--font-open-sans",
-  display: "swap",
-});
-
-const poppins = Poppins({
-  weight: ["400", "500", "600", "700"],
-  subsets: ["latin"],
-  variable: "--font-poppins",
-  display: "swap",
-});
-
-const notoSansSC = Noto_Sans_SC({
-  weight: ["400", "500", "600", "700"],
-  subsets: ["latin"],
-  variable: "--font-noto-sans-sc",
-  display: "swap",
-});
 
 const SITE_URL = process.env.SITE_URL || "https://yanchuaner.cn";
 
@@ -93,8 +72,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="zh-CN" className={`${openSans.variable} ${poppins.variable} ${notoSansSC.variable}`}>
-      <body className="font-sans antialiased text-[#4C1D95] bg-[#FAF5FF]">
+    <html lang="zh-CN">
+      <body className="font-sans antialiased text-[var(--color-text)] bg-[var(--color-background)]">
         <a
           href="#main"
           className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-lg focus:bg-[#7C3AED] focus:px-4 focus:py-2 focus:text-sm focus:font-medium focus:text-white focus:shadow-lg focus:outline-none focus:ring-2 focus:ring-[#7C3AED] focus:ring-offset-2 focus:ring-offset-[#FAF5FF]"
@@ -104,21 +83,14 @@ export default function RootLayout({
         <AuthProvider>
             <UUIDCompat />
             <div className="relative min-h-screen overflow-hidden bg-gradient-to-b from-[#FAF5FF] to-[#F3E8FF]">
-            {/* 导航栏 */}
-            <header className="glass sticky top-0 z-50 border-b border-[#7C3AED]/10 transition-colors duration-300 hover:border-[#7C3AED]/20">
-              <div className="mx-auto flex h-[68px] max-w-[1320px] items-center justify-between px-5 md:px-8 xl:px-10">
-                <Link
-                  href="/"
-                  aria-label="返回首页：燕中数字母港"
-                  tabIndex={0}
-                  className="group relative shrink-0 text-lg font-bold tracking-wide text-[#7C3AED] transition-colors duration-300 hover:text-[#5B21B6] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#7C3AED] focus-visible:ring-offset-2 focus-visible:ring-offset-[#FAF5FF] rounded-sm cursor-pointer font-heading"
-                >
-                  {"燕中数字母港"}
-                  <span className="absolute -bottom-1 left-0 h-0.5 w-0 bg-[#7C3AED] shadow-[0_0_8px_rgba(124,58,237,0.5)] transition-all duration-300 group-hover:w-full"></span>
-                </Link>
-                <MobileNav />
+              {/* 全局宇宙氛围背景（使所有子页面的磨砂玻璃卡片背后折射出流星与星空） */}
+              <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden opacity-60" aria-hidden="true">
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_10%_15%,rgba(124,58,237,0.06),transparent_40%),radial-gradient(circle_at_85%_80%,rgba(167,139,250,0.08),transparent_40%)]" />
+                <InteractiveStarfield />
+                <div className="meteor-layer absolute inset-0 opacity-[0.10]" />
               </div>
-            </header>
+            {/* 导航栏 */}
+            <Header />
 
             <main id="main" className="relative z-20">{children}</main>
 

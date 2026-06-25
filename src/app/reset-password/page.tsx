@@ -2,6 +2,7 @@
 
 import { FormEvent, useState } from "react";
 import { useSearchParams } from "next/navigation";
+import { PageShell, GlassCard, Button } from "@/components/ui";
 
 export default function ResetPasswordPage() {
   const token = useSearchParams().get("token");
@@ -24,22 +25,24 @@ export default function ResetPasswordPage() {
   }
 
   return (
-    <section className="mx-auto max-w-md px-4 py-16">
-      <form onSubmit={submit} className="rounded-2xl border border-brand/15 bg-white/75 p-7">
-        <h1 className="text-2xl font-bold">{token ? "重置密码" : "忘记密码"}</h1>
-        <div className="mt-5 space-y-4">
-          {token ? (
-            <>
-              <input name="password" type="password" className="input w-full" placeholder="新密码（8-64 位）" required minLength={8} maxLength={64} />
-              <input name="confirmPassword" type="password" className="input w-full" placeholder="确认新密码" required minLength={8} maxLength={64} />
-            </>
-          ) : (
-            <input name="email" type="email" className="input w-full" placeholder="注册邮箱" required />
-          )}
-          <button className="btn-primary w-full">{token ? "重置密码" : "发送重置邮件"}</button>
-          {message ? <p className="text-sm">{message}</p> : null}
-        </div>
-      </form>
-    </section>
+    <PageShell size="narrow" className="flex min-h-[60vh] items-center">
+      <GlassCard className="w-full p-7">
+        <form onSubmit={submit}>
+          <h1 className="text-2xl font-bold text-brand-fg">{token ? "重置密码" : "忘记密码"}</h1>
+          <div className="mt-5 space-y-4">
+            {token ? (
+              <>
+                <input name="password" type="password" className="input w-full" placeholder="新密码（8-64 位）" required minLength={8} maxLength={64} />
+                <input name="confirmPassword" type="password" className="input w-full" placeholder="确认新密码" required minLength={8} maxLength={64} />
+              </>
+            ) : (
+              <input name="email" type="email" className="input w-full" placeholder="注册邮箱" required />
+            )}
+            <Button type="submit" variant="primary" className="w-full mt-2">{token ? "重置密码" : "发送重置邮件"}</Button>
+            {message ? <p className="mt-4 text-sm text-brand-fg/70">{message}</p> : null}
+          </div>
+        </form>
+      </GlassCard>
+    </PageShell>
   );
 }
