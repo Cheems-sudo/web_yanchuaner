@@ -22,6 +22,7 @@ const NAV_SECTIONS: NavSection[] = [
     items: [
       { href: '/admin/users', label: '用户审核', icon: Users },
       { href: '/admin/user-claims', label: '旧资料认领', icon: Users },
+      { href: '/admin/stories/pending', label: '故事审核', icon: Feather },
       { href: '/admin/posts', label: '内容审核', icon: FileText },
       { href: '/admin/alumni-corrections', label: '信息修改申请', icon: FileEdit },
     ],
@@ -59,6 +60,7 @@ function AdminBreadcrumbs() {
     news: '新闻管理',
     events: '活动管理',
     stories: '燕中故事',
+    pending: '故事审核',
     achievements: '校友成就墙',
     memories: '燕中记忆',
     teachers: '教师频道',
