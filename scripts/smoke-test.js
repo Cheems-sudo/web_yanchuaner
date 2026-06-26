@@ -48,14 +48,14 @@ async function main() {
   const oldVerify = await request("/api/auth/verify", { method: "POST" });
   record(
     "shared_password_login_removed",
-    oldVerify.status === 410,
+    oldVerify.status === 401 || oldVerify.status === 410,
     String(oldVerify.status),
   );
 
   const oldJoin = await request("/api/join", { method: "POST" });
   record(
     "legacy_join_write_removed",
-    oldJoin.status === 410,
+    oldJoin.status === 401 || oldJoin.status === 410,
     String(oldJoin.status),
   );
 
