@@ -95,11 +95,11 @@ model UserClaimRequest {
 model WhitelistRoster {
   id              String   @id @default(uuid())
   name            String
+  gender          String?
   graduationClass String?
   className       String?
   email           String?
   contact         String?
-  tags            String?
   city            String?
   university      String?
   major           String?
