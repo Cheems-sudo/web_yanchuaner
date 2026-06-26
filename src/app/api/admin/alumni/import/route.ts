@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/db";
 import { requireAdmin } from "@/lib/admin-auth";
-import { normalizeTags } from "@/lib/tags";
 import { upsertRosterEntry } from "@/lib/roster";
 
 function parseCSVLine(text: string): string[] {
@@ -46,7 +45,6 @@ function detectHeaders(
   graduationClassIdx: number;
   classNameIdx: number;
   emailIdx: number;
-  tagsIdx: number;
   cityIdx: number;
   universityIdx: number;
   majorIdx: number;
@@ -61,8 +59,6 @@ function detectHeaders(
     classname: "className",
     邮箱: "email",
     email: "email",
-    标签: "tags",
-    tags: "tags",
     城市: "city",
     所在城市: "city",
     city: "city",
@@ -83,7 +79,6 @@ function detectHeaders(
   let graduationClassIdx = -1;
   let classNameIdx = -1;
   let emailIdx = -1;
-  let tagsIdx = -1;
   let cityIdx = -1;
   let universityIdx = -1;
   let majorIdx = -1;
@@ -96,7 +91,6 @@ function detectHeaders(
     else if (mapped === "graduationClass") graduationClassIdx = i;
     else if (mapped === "className") classNameIdx = i;
     else if (mapped === "email") emailIdx = i;
-    else if (mapped === "tags") tagsIdx = i;
     else if (mapped === "city") cityIdx = i;
     else if (mapped === "university") universityIdx = i;
     else if (mapped === "major") majorIdx = i;
@@ -108,7 +102,6 @@ function detectHeaders(
     graduationClassIdx,
     classNameIdx,
     emailIdx,
-    tagsIdx,
     cityIdx,
     universityIdx,
     majorIdx,
@@ -150,7 +143,6 @@ export async function POST(req: NextRequest) {
       graduationClassIdx,
       classNameIdx,
       emailIdx,
-      tagsIdx,
       cityIdx,
       universityIdx,
       majorIdx,
@@ -192,9 +184,6 @@ export async function POST(req: NextRequest) {
             emailIdx >= 0
               ? (fields[emailIdx] || "").trim().toLowerCase() || null
               : null;
-          const rawTags =
-            tagsIdx >= 0 ? (fields[tagsIdx] || "").trim() || null : null;
-          const tags = rawTags ? normalizeTags(rawTags) : null;
 
           let city = cityIdx >= 0 ? (fields[cityIdx] || "").trim() || null : null;
           if (city) {
@@ -230,7 +219,6 @@ export async function POST(req: NextRequest) {
             graduationClass,
             className,
             email,
-            tags,
             city,
             university,
             major,

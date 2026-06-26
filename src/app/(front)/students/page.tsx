@@ -40,11 +40,10 @@ export default async function StudentsPage() {
             const Icon = ICON_MAP[c.icon] || BookOpen;
             const href = c.href || '#';
             const colors = [
-              'from-violet-100 to-purple-50 border-violet-200',
-              'from-indigo-100 to-blue-50 border-indigo-200',
-              'from-fuchsia-100 to-pink-50 border-fuchsia-200',
-              'from-emerald-100 to-teal-50 border-emerald-200',
-              'from-amber-100 to-orange-50 border-amber-200',
+              'from-[#7C3AED]/10 to-[#A78BFA]/5 border-[#7C3AED]/15',
+              'from-[#7C3AED]/8 to-[#4C1D95]/5 border-[#7C3AED]/10',
+              'from-[#A78BFA]/10 to-[#7C3AED]/5 border-[#A78BFA]/15',
+              'from-[#7C3AED]/12 to-[#4C1D95]/8 border-[#7C3AED]/10',
             ];
             const colorClass = colors[Math.abs(hashCode(c.id)) % colors.length];
 
@@ -54,12 +53,12 @@ export default async function StudentsPage() {
                 href={href}
                 className={`group relative overflow-hidden rounded-card border bg-gradient-to-br ${colorClass} p-5 transition hover:shadow-lg hover:-translate-y-1`}
               >
-                <div className="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-white/70 shadow-sm">
+                <div className="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-brand/10">
                   <Icon size={22} className="text-brand" />
                 </div>
                 <h3 className="font-heading mt-4 text-lg font-semibold text-brand-fg">{c.title}</h3>
-                <p className="mt-2 text-sm leading-6 text-gray-600">{c.description}</p>
-                <div className="mt-4 flex items-center gap-1 text-xs font-medium text-brand/70 transition group-hover:gap-1.5">
+                <p className="mt-2 text-sm leading-6 text-brand-fg/70">{c.description}</p>
+                <div className="mt-4 flex items-center gap-1 text-xs font-medium text-brand transition group-hover:gap-1.5">
                   进入 <ChevronRight size={12} />
                 </div>
               </Link>
@@ -71,20 +70,20 @@ export default async function StudentsPage() {
           <EmptyState icon={BookOpen} title="在校生资源正在整理中，敬请期待。" />
         )}
 
-        <div className="mt-10 rounded-card border border-line bg-surface/50 p-5">
+        <div className="mt-10 rounded-card border border-brand/10 bg-surface/50 p-5">
           <div className="flex items-start gap-3">
             <div className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-brand/10">
               <Mail size={20} className="text-brand" />
             </div>
             <div>
               <h3 className="font-heading text-base font-semibold text-brand-fg">补充内容或分享经验</h3>
-              <p className="mt-1.5 text-sm leading-6 text-gray-600">
+              <p className="mt-1.5 text-sm leading-6 text-brand-fg/70">
                 欢迎校友通过{" "}
-                <Link href="/alumni/stories" className="text-brand underline hover:text-brand-fg transition-colors">
+                <Link href="/alumni/stories" className="text-brand underline hover:text-brand-soft transition-colors">
                   燕中故事
                 </Link>{" "}
                 分享你的大学经历或给学弟学妹的建议。也欢迎通过{" "}
-                <Link href="/contact" className="text-brand underline hover:text-brand-fg transition-colors">
+                <Link href="/contact" className="text-brand underline hover:text-brand-soft transition-colors">
                   联系我们
                 </Link>{" "}
                 提供资料。

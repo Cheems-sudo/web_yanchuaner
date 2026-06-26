@@ -48,7 +48,7 @@ export default function AlumniMessagesPage() {
         />
 
         {/* Note */}
-        <div className="mt-6 rounded-2xl border border-purple-200 bg-purple-50/50 p-4">
+        <div className="mt-6 rounded-card border border-purple-200 bg-purple-50/50 p-4">
           <div className="flex items-start gap-3">
             <Quote size={18} className="mt-0.5 shrink-0 text-purple-500" />
             <div>
@@ -64,23 +64,23 @@ export default function AlumniMessagesPage() {
           {themes.map((item) => (
             <div
               key={item.title}
-              className="rounded-2xl border border-brand/10 bg-surface/50 p-5"
+              className="rounded-card border border-brand/10 bg-surface/50 p-5"
             >
               <h3 className="font-heading text-base font-semibold text-brand-fg">{item.title}</h3>
-              <p className="mt-3 text-sm leading-7 text-gray-600">{item.content}</p>
+              <p className="mt-3 text-sm leading-7 text-brand-fg/70">{item.content}</p>
             </div>
           ))}
         </div>
 
         {/* Contribution */}
-        <div className="mt-8 rounded-2xl border border-brand/10 bg-surface-muted p-5">
+        <div className="mt-8 rounded-card border border-brand/10 bg-surface-muted p-5">
           <div className="flex items-start gap-3">
             <div className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-brand/10">
               <Mail size={18} className="text-brand" />
             </div>
             <div>
               <h3 className="font-heading text-sm font-semibold text-brand-fg">分享你的寄语</h3>
-              <p className="mt-1 text-xs leading-6 text-gray-600">
+              <p className="mt-1 text-xs leading-6 text-brand-fg/70">
                 欢迎校友通过{" "}
                 <Link href="/contact" className="text-brand underline hover:text-brand-fg transition-colors">
                   联系我们
@@ -92,14 +92,14 @@ export default function AlumniMessagesPage() {
         </div>
 
         {/* Disclaimer */}
-        <div className="mt-6 rounded-2xl border border-amber-200 bg-amber-50/50 p-5">
+        <div className="mt-6 rounded-card border border-amber-500/15 bg-amber-500/5 p-5">
           <div className="flex items-start gap-3">
-            <div className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-amber-100">
-              <Shield size={16} className="text-amber-700" />
+            <div className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-amber-500/10">
+              <Shield size={16} className="text-amber-300/80" />
             </div>
             <div>
-              <h3 className="font-heading text-sm font-semibold text-amber-800">免责声明</h3>
-              <p className="mt-1 text-xs leading-6 text-amber-700">
+              <h3 className="font-heading text-sm font-semibold text-amber-300">免责声明</h3>
+              <p className="mt-1 text-xs leading-6 text-amber-300/80">
                 本页面内容为校友经验分享和通用整理，不代表燕川中学或校友会官方意见。每个人的经历和感受不同，请理性参考。
               </p>
             </div>

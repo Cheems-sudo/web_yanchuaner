@@ -73,11 +73,11 @@ export default function LearningMethodsPage() {
 
         <div className="mt-8 grid gap-4 md:grid-cols-2">
           {methods.map((section) => (
-            <div key={section.title} className="rounded-2xl border border-brand/10 bg-surface/50 p-5">
+            <div key={section.title} className="rounded-card border border-brand/10 bg-surface/50 p-5">
               <h3 className="font-heading text-base font-semibold text-brand-fg">{section.title}</h3>
               <ul className="mt-3 space-y-2">
                 {section.points.map((point, i) => (
-                  <li key={i} className="flex items-start gap-2 text-sm leading-5 text-gray-600">
+                  <li key={i} className="flex items-start gap-2 text-sm leading-5 text-brand-fg/70">
                     <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-brand/40" />
                     {point}
                   </li>
@@ -88,14 +88,14 @@ export default function LearningMethodsPage() {
         </div>
 
         {/* Disclaimer */}
-        <div className="mt-8 rounded-2xl border border-amber-200 bg-amber-50/50 p-5">
+        <div className="mt-8 rounded-card border border-amber-500/15 bg-amber-500/5 p-5">
           <div className="flex items-start gap-3">
-            <div className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-amber-100">
-              <Shield size={16} className="text-amber-700" />
+            <div className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-amber-500/10">
+              <Shield size={16} className="text-amber-300/80" />
             </div>
             <div>
-              <h3 className="font-heading text-sm font-semibold text-amber-800">免责声明</h3>
-              <p className="mt-1 text-xs leading-6 text-amber-700">
+              <h3 className="font-heading text-sm font-semibold text-amber-300">免责声明</h3>
+              <p className="mt-1 text-xs leading-6 text-amber-300/80">
                 本页面内容为通用学习方法整理，仅供参考。每个人的学习习惯和节奏不同，具体学习安排应结合个人实际情况和老师建议。不构成任何学习效果承诺。
               </p>
             </div>

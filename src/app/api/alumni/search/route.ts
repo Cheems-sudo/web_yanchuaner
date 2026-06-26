@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/db';
 import { requireVerifiedAlumni } from '@/lib/admin-auth';
-import { parseTags } from '@/lib/tags';
 
 export const dynamic = "force-dynamic";
 
@@ -21,32 +20,36 @@ export async function GET(req: NextRequest) {
       where: {
         OR: [
           { name: { contains: q } },
-          { tags: { contains: q } },
           { graduationClass: { contains: q } },
+          { city: { contains: q } },
+          { university: { contains: q } },
+          { major: { contains: q } },
         ],
       },
       select: {
         id: true,
         name: true,
         graduationClass: true,
-        tags: true,
+        className: true,
+        city: true,
+        university: true,
+        major: true,
+        industry: true,
       },
       take: 20,
       orderBy: { name: 'asc' },
     });
 
-    const results = rows.map((r) => {
-      const { university, major, city } = parseTags(r.tags ?? null);
-      return {
-        id: r.id,
-        name: r.name,
-        graduationClass: r.graduationClass || '',
-        tags: r.tags || '',
-        university,
-        major,
-        city,
-      };
-    });
+    const results = rows.map((r) => ({
+      id: r.id,
+      name: r.name,
+      graduationClass: r.graduationClass || '',
+      className: r.className || '',
+      university: r.university || '',
+      major: r.major || '',
+      city: r.city || '',
+      industry: r.industry || '',
+    }));
 
     return NextResponse.json({ results, total: results.length });
   } catch (error) {

@@ -22,7 +22,11 @@ type AlumniItem = {
   className: string | null;
   email: string | null;
   contact: string | null;
-  tags: string | null;
+  gender: string | null;
+  city: string | null;
+  university: string | null;
+  major: string | null;
+  industry: string | null;
   certificateNo: string | null;
   createdAt: string;
 };
@@ -51,7 +55,7 @@ function csvEscape(val: string): string {
 }
 
 function alumniCSVContent(rows: AlumniItem[]): string {
-  const header = '姓名,届别,班级,邮箱,联系方式,标签';
+  const header = '姓名,届别,班级,邮箱,联系方式,城市,院校,专业,行业';
   const lines = rows.map((r) =>
     [
       r.name,
@@ -59,7 +63,10 @@ function alumniCSVContent(rows: AlumniItem[]): string {
       r.className || '',
       r.email || '',
       r.contact || '',
-      r.tags || '',
+      r.city || '',
+      r.university || '',
+      r.major || '',
+      r.industry || '',
     ].map(csvEscape).join(','),
   );
   return '﻿' + header + '\n' + lines.join('\n');
@@ -82,7 +89,10 @@ export default function AdminAlumniPage() {
   const [formClassName, setFormClassName] = useState('');
   const [formEmail, setFormEmail] = useState('');
   const [formContact, setFormContact] = useState('');
-  const [formTags, setFormTags] = useState('');
+  const [formCity, setFormCity] = useState('');
+  const [formUniversity, setFormUniversity] = useState('');
+  const [formMajor, setFormMajor] = useState('');
+  const [formIndustry, setFormIndustry] = useState('');
   const [formCertNo, setFormCertNo] = useState('');
   const [formError, setFormError] = useState('');
   const [formSaving, setFormSaving] = useState(false);
@@ -137,7 +147,10 @@ export default function AdminAlumniPage() {
     setFormClassName('');
     setFormEmail('');
     setFormContact('');
-    setFormTags('');
+    setFormCity('');
+    setFormUniversity('');
+    setFormMajor('');
+    setFormIndustry('');
     setFormCertNo('');
     setFormError('');
     setShowForm(true);
@@ -151,7 +164,10 @@ export default function AdminAlumniPage() {
     setFormClassName(item.className || '');
     setFormEmail(item.email || '');
     setFormContact(item.contact || '');
-    setFormTags(item.tags || '');
+    setFormCity(item.city || '');
+    setFormUniversity(item.university || '');
+    setFormMajor(item.major || '');
+    setFormIndustry(item.industry || '');
     setFormCertNo(item.certificateNo || '');
     setFormError('');
     setShowForm(true);
@@ -184,11 +200,10 @@ export default function AdminAlumniPage() {
       setFormError('联系方式需为11位手机号');
       return;
     }
-    const tags = formTags.trim();
-    if (tags.length > 500) {
-      setFormError('标签不超过500字');
-      return;
-    }
+    const city = formCity.trim();
+    const university = formUniversity.trim();
+    const major = formMajor.trim();
+    const industry = formIndustry.trim();
 
     setFormSaving(true);
     setFormError('');
@@ -206,7 +221,10 @@ export default function AdminAlumniPage() {
           className: className || null,
           email: email || null,
           contact: contact || null,
-          tags: tags || null,
+          city: city || null,
+          university: university || null,
+          major: major || null,
+          industry: industry || null,
           certificateNo: formCertNo.trim() || null,
         }),
       });
@@ -420,7 +438,10 @@ export default function AdminAlumniPage() {
                 <th className="px-4 py-3 font-medium">班级</th>
                 <th className="px-4 py-3 font-medium">邮箱</th>
                 <th className="px-4 py-3 font-medium">联系方式</th>
-                <th className="px-4 py-3 font-medium">标签</th>
+                <th className="px-4 py-3 font-medium">城市</th>
+                <th className="px-4 py-3 font-medium">院校</th>
+                <th className="px-4 py-3 font-medium">专业</th>
+                <th className="px-4 py-3 font-medium">行业</th>
                 <th className="px-4 py-3 font-medium">添加时间</th>
                 <th className="w-24 px-4 py-3 font-medium">操作</th>
               </tr>
@@ -436,8 +457,15 @@ export default function AdminAlumniPage() {
                   <td className="px-4 py-3 text-[#4C1D95]/60">{item.className || '-'}</td>
                   <td className="px-4 py-3 text-[#4C1D95]/60">{item.email || '-'}</td>
                   <td className="px-4 py-3 text-[#4C1D95]/60">{item.contact || '-'}</td>
-                  <td className="max-w-xs truncate px-4 py-3 text-[#4C1D95]/60">
-                    {item.tags || '-'}
+                  <td className="px-4 py-3 text-[#4C1D95]/60">{item.city || '-'}</td>
+                  <td className="max-w-[120px] truncate px-4 py-3 text-[#4C1D95]/60">
+                    {item.university || '-'}
+                  </td>
+                  <td className="max-w-[120px] truncate px-4 py-3 text-[#4C1D95]/60">
+                    {item.major || '-'}
+                  </td>
+                  <td className="max-w-[120px] truncate px-4 py-3 text-[#4C1D95]/60">
+                    {item.industry || '-'}
                   </td>
                   <td className="px-4 py-3 text-xs text-[#4C1D95]/40">
                     {new Date(item.createdAt).toLocaleDateString('zh-CN')}
@@ -567,18 +595,48 @@ export default function AdminAlumniPage() {
                 />
               </div>
               <div>
-                <label className="mb-1 block text-sm font-medium text-[#4C1D95]">标签</label>
+                <label className="mb-1 block text-sm font-medium text-[#4C1D95]">城市</label>
                 <input
                   type="text"
-                  value={formTags}
-                  onChange={(e) => setFormTags(e.target.value)}
+                  value={formCity}
+                  onChange={(e) => setFormCity(e.target.value)}
                   className="input w-full"
-                  placeholder="格式：大学 | 专业 | 城市"
+                  placeholder="例如：深圳"
                   disabled={formSaving}
                 />
-                <p className="mt-1 text-xs text-[#4C1D95]/40">
-                  格式建议：大学名 | 专业名 | 城市名（用 | 分隔）
-                </p>
+              </div>
+              <div>
+                <label className="mb-1 block text-sm font-medium text-[#4C1D95]">院校</label>
+                <input
+                  type="text"
+                  value={formUniversity}
+                  onChange={(e) => setFormUniversity(e.target.value)}
+                  className="input w-full"
+                  placeholder="例如：北京大学"
+                  disabled={formSaving}
+                />
+              </div>
+              <div>
+                <label className="mb-1 block text-sm font-medium text-[#4C1D95]">专业</label>
+                <input
+                  type="text"
+                  value={formMajor}
+                  onChange={(e) => setFormMajor(e.target.value)}
+                  className="input w-full"
+                  placeholder="例如：计算机科学"
+                  disabled={formSaving}
+                />
+              </div>
+              <div>
+                <label className="mb-1 block text-sm font-medium text-[#4C1D95]">行业</label>
+                <input
+                  type="text"
+                  value={formIndustry}
+                  onChange={(e) => setFormIndustry(e.target.value)}
+                  className="input w-full"
+                  placeholder="例如：互联网"
+                  disabled={formSaving}
+                />
               </div>
               <div>
                 <label className="mb-1 block text-sm font-medium text-[#4C1D95]">证书编号</label>
