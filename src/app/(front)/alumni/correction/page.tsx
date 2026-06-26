@@ -4,6 +4,7 @@ import { useRef, useState } from 'react';
 import { Search, AlertTriangle, CheckCircle2, Loader2, Send } from 'lucide-react';
 import { PageShell, GlassCard, Button, ButtonLink, EmptyState, DisclaimerBanner } from '@/components/ui';
 import { toast } from 'sonner';
+import Link from 'next/link';
 
 type AlumniResult = {
   id: string;

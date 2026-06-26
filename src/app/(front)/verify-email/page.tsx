@@ -8,9 +8,10 @@ import { PageShell, GlassCard, Button, ButtonLink } from "@/components/ui";
 export default function VerifyEmailPage() {
   const params = useSearchParams();
   const token = params.get("token");
+  const initialEmail = params.get("email") || "";
   
-  const [email, setEmail] = useState("");
-  const [status, setStatus] = useState<"idle" | "verifying" | "success" | "error">(
+  const [email, setEmail] = useState(initialEmail);
+  const [status, setStatus] = useState<"idle" | "verifying" | "success" | "sent" | "error">(
     token ? "verifying" : "idle"
   );
   const [message, setMessage] = useState(token ? "正在验证您的邮箱凭证，请稍候…" : "");
@@ -52,8 +53,8 @@ export default function VerifyEmailPage() {
       });
       const data = await response.json();
       if (response.ok) {
-        setStatus("success");
-        setMessage(data.message || "验证邮件已成功发送，请检查您的收件箱。");
+        setStatus("sent");
+        setMessage(data.message || "重发请求已提交，请检查您的邮箱。");
       } else {
         setStatus("error");
         setMessage(data.error || "发送验证邮件失败，请检查邮箱地址或稍后重试。");
@@ -75,6 +76,9 @@ export default function VerifyEmailPage() {
           {status === "success" && (
             <CheckCircle2 className="w-16 h-16 text-accent drop-shadow-[0_0_15px_rgba(34,197,94,0.5)]" />
           )}
+          {status === "sent" && (
+            <Mail className="w-16 h-16 text-brand drop-shadow-[0_0_15px_rgba(167,139,250,0.5)]" />
+          )}
           {status === "error" && (
             <XCircle className="w-16 h-16 text-rose-500 drop-shadow-[0_0_15px_rgba(239,68,68,0.5)]" />
           )}
@@ -88,6 +92,7 @@ export default function VerifyEmailPage() {
           {status === "idle" && "发送验证邮件"}
           {status === "verifying" && "正在验证邮箱"}
           {status === "success" && "邮箱验证成功"}
+          {status === "sent" && "重发请求已提交"}
           {status === "error" && "验证失败"}
         </h1>
 
@@ -123,7 +128,7 @@ export default function VerifyEmailPage() {
         )}
 
         {/* 交互闭环导航 (登录/重试) */}
-        {(status === "success" || status === "error") && (
+        {(status === "success" || status === "sent" || status === "error") && (
           <div className="flex flex-col items-center gap-4 mt-6 w-full">
             <ButtonLink
               href="/login"

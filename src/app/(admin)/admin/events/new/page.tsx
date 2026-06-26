@@ -8,13 +8,6 @@ import Link from 'next/link';
 import { AdminPageShell } from '@/components/admin/AdminPageShell';
 import { toast } from 'sonner';
 
-function toLocalDatetime(isoString: string): string {
-  const d = new Date(isoString);
-  const local = new Date(d.getTime() + 8 * 60 * 60 * 1000);
-  const iso = local.toISOString();
-  return iso.slice(0, 16);
-}
-
 function toISODatetime(localValue: string): string {
   return new Date(localValue + '+08:00').toISOString();
 }
