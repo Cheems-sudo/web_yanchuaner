@@ -115,8 +115,9 @@ export default function AdminTeachersPage() {
         </h2>
         <div className="grid gap-4 md:grid-cols-2">
           <div>
-            <label className="mb-1 block text-sm font-medium text-brand-fg">标题 *</label>
+            <label htmlFor="title" className="mb-1 block text-sm font-medium text-brand-fg">标题 *</label>
             <input
+              id="title"
               type="text"
               value={form.title}
               onChange={(e) => setForm({ ...form, title: e.target.value })}
@@ -152,8 +153,9 @@ export default function AdminTeachersPage() {
             </div>
           </div>
           <div className="md:col-span-2">
-            <label className="mb-1 block text-sm font-medium text-brand-fg">描述</label>
+            <label htmlFor="description" className="mb-1 block text-sm font-medium text-brand-fg">描述</label>
             <textarea
+              id="description"
               value={form.description}
               onChange={(e) => setForm({ ...form, description: e.target.value })}
               className="input w-full min-h-[60px]"
@@ -162,8 +164,9 @@ export default function AdminTeachersPage() {
             />
           </div>
           <div className="md:col-span-2">
-            <label className="mb-1 block text-sm font-medium text-brand-fg">底部备注</label>
+            <label htmlFor="note" className="mb-1 block text-sm font-medium text-brand-fg">底部备注</label>
             <input
+              id="note"
               type="text"
               value={form.note}
               onChange={(e) => setForm({ ...form, note: e.target.value })}
@@ -173,8 +176,9 @@ export default function AdminTeachersPage() {
             />
           </div>
           <div>
-            <label className="mb-1 block text-sm font-medium text-brand-fg">跳转链接（可选）</label>
+            <label htmlFor="href" className="mb-1 block text-sm font-medium text-brand-fg">跳转链接（可选）</label>
             <input
+              id="href"
               type="text"
               value={form.href}
               onChange={(e) => setForm({ ...form, href: e.target.value })}
@@ -184,8 +188,9 @@ export default function AdminTeachersPage() {
             />
           </div>
           <div>
-            <label className="mb-1 block text-sm font-medium text-brand-fg">按钮文字（可选）</label>
+            <label htmlFor="actionLabel" className="mb-1 block text-sm font-medium text-brand-fg">按钮文字（可选）</label>
             <input
+              id="actionLabel"
               type="text"
               value={form.actionLabel}
               onChange={(e) => setForm({ ...form, actionLabel: e.target.value })}

@@ -172,17 +172,23 @@ export default function MyPostsPage() {
 
       {/* 删除确认弹窗 */}
       {confirmDelete && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm px-4">
-          <div className="w-full max-w-md rounded-modal border border-line bg-surface p-6 shadow-lg backdrop-blur-md">
-            <h3 className="text-lg font-semibold text-brand font-heading">确认删除</h3>
+        <div 
+          className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/60 backdrop-blur-sm px-4 pb-safe sm:pb-4 animate-fade-in"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="delete-confirm-title"
+        >
+          <div className="w-full max-w-md rounded-modal border border-line bg-surface p-6 shadow-lg backdrop-blur-md mb-4 sm:mb-0 animate-slide-in sm:animate-fade-in">
+            <h3 id="delete-confirm-title" className="text-lg font-semibold text-brand font-heading">确认删除</h3>
             <p className="mt-3 text-sm leading-6 text-brand-fg/70">
               确定要撤销并删除投稿《{confirmDelete.title}》吗？此操作不可撤销。
             </p>
-            <div className="mt-5 flex justify-end gap-3">
+            <div className="mt-5 flex flex-col-reverse sm:flex-row justify-end gap-3">
               <Button
                 onClick={() => setConfirmDelete(null)}
                 disabled={deletingId === confirmDelete.id}
                 variant="secondary"
+                className="w-full sm:w-auto min-h-[44px] sm:min-h-0 cursor-pointer"
               >
                 取消
               </Button>
@@ -190,6 +196,7 @@ export default function MyPostsPage() {
                 onClick={handleDelete}
                 disabled={deletingId === confirmDelete.id}
                 variant="danger"
+                className="w-full sm:w-auto min-h-[44px] sm:min-h-0 cursor-pointer"
               >
                 {deletingId === confirmDelete.id ? '处理中...' : '确认删除'}
               </Button>

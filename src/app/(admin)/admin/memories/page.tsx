@@ -145,8 +145,9 @@ export default function AdminMemoriesPage() {
         </h2>
         <div className="grid gap-4 md:grid-cols-2">
           <div>
-            <label className="mb-1 block text-sm font-medium text-brand-fg">标题 *</label>
+            <label htmlFor="title" className="mb-1 block text-sm font-medium text-brand-fg">标题 *</label>
             <input
+              id="title"
               type="text"
               value={form.title}
               onChange={(e) => setForm({ ...form, title: e.target.value })}
@@ -156,8 +157,9 @@ export default function AdminMemoriesPage() {
             />
           </div>
           <div>
-            <label className="mb-1 block text-sm font-medium text-brand-fg">副标题</label>
+            <label htmlFor="subtitle" className="mb-1 block text-sm font-medium text-brand-fg">副标题</label>
             <input
+              id="subtitle"
               type="text"
               value={form.subtitle}
               onChange={(e) => setForm({ ...form, subtitle: e.target.value })}
@@ -167,8 +169,9 @@ export default function AdminMemoriesPage() {
             />
           </div>
           <div className="md:col-span-2">
-            <label className="mb-1 block text-sm font-medium text-brand-fg">描述</label>
+            <label htmlFor="description" className="mb-1 block text-sm font-medium text-brand-fg">描述</label>
             <textarea
+              id="description"
               value={form.description}
               onChange={(e) => setForm({ ...form, description: e.target.value })}
               className="input w-full min-h-[80px]"
@@ -177,9 +180,10 @@ export default function AdminMemoriesPage() {
             />
           </div>
           <div>
-            <label className="mb-1 block text-sm font-medium text-brand-fg">图片路径</label>
+            <label htmlFor="imagePath" className="mb-1 block text-sm font-medium text-brand-fg">图片路径</label>
             <div className="flex gap-2">
               <input
+                id="imagePath"
                 type="text"
                 value={form.imagePath}
                 onChange={(e) => setForm({ ...form, imagePath: e.target.value })}
@@ -197,8 +201,9 @@ export default function AdminMemoriesPage() {
             )}
           </div>
           <div>
-            <label className="mb-1 block text-sm font-medium text-brand-fg">图片说明（alt）</label>
+            <label htmlFor="imageAlt" className="mb-1 block text-sm font-medium text-brand-fg">图片说明（alt）</label>
             <input
+              id="imageAlt"
               type="text"
               value={form.imageAlt}
               onChange={(e) => setForm({ ...form, imageAlt: e.target.value })}

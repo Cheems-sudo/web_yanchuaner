@@ -173,7 +173,7 @@ export default async function HomePage() {
           <h1 className="font-heading text-3xl font-extrabold tracking-tight text-[#4C1D95] md:text-5xl lg:text-6xl drop-shadow-sm">
             连接燕中人的<br className="md:hidden" />温暖社区
           </h1>
-          <p className="max-w-2xl text-base text-slate-600 md:text-lg">
+          <p className="max-w-full md:max-w-2xl text-base text-slate-600 md:text-lg">
             在这里，我们跨越山海，重温青春记忆。寻找同窗挚友，探索校友足迹，共建属于我们的精神家园。
           </p>
           <div className="mt-4 flex flex-wrap items-center justify-center gap-4 md:gap-6">

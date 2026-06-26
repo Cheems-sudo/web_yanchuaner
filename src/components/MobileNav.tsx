@@ -282,7 +282,7 @@ export default function MobileNav() {
       {open && mounted && createPortal(
         <>
           <div
-            className="fixed inset-0 z-[60] bg-black/80 backdrop-blur-sm lg:hidden"
+            className="fixed inset-0 z-[60] bg-black/80 backdrop-blur-sm lg:hidden animate-fade-in"
             onClick={() => setOpen(false)}
             aria-hidden="true"
           />
@@ -292,7 +292,7 @@ export default function MobileNav() {
             role="dialog"
             aria-modal="true"
             aria-label="导航菜单"
-            className="fixed right-0 top-0 z-[60] flex h-full w-80 max-w-[88vw] flex-col border-l border-brand/15 bg-surface/95 p-5 backdrop-blur-xl shadow-2xl lg:hidden"
+            className="fixed right-0 top-0 z-[60] flex h-full w-80 max-w-[88vw] flex-col border-l border-brand/15 bg-surface/95 p-5 backdrop-blur-xl shadow-2xl lg:hidden animate-slide-in"
           >
             <div className="mb-4 flex items-center justify-between">
               <p className="text-sm font-semibold text-brand font-heading">导航菜单</p>
@@ -356,25 +356,25 @@ export default function MobileNav() {
               {isLoggedIn ? (
                 <div className="space-y-2">
                   {user?.role === "ADMIN" ? (
-                    <Link href="/admin" onClick={() => setOpen(false)} className="block text-center text-sm font-medium text-brand">
+                    <Link href="/admin" onClick={() => setOpen(false)} className="flex min-h-[44px] items-center justify-center text-sm font-medium text-brand">
                       管理后台
                     </Link>
                   ) : null}
-                  <Link href="/me" onClick={() => setOpen(false)} className={cn(JOIN_CTA, 'w-full')}>
+                  <Link href="/me" onClick={() => setOpen(false)} className={cn(JOIN_CTA, 'w-full min-h-[44px]')}>
                     个人中心
                   </Link>
                   {!isAdminPath ? (
-                    <button type="button" onClick={() => void logout()} className="w-full text-sm text-brand">
+                    <button type="button" onClick={() => void logout()} className="flex min-h-[44px] w-full items-center justify-center text-sm text-brand">
                       退出登录
                     </button>
                   ) : null}
                 </div>
               ) : (
                 <div className="space-y-2">
-                  <Link href="/login" onClick={() => setOpen(false)} className="block text-center text-sm text-brand">
+                  <Link href="/login" onClick={() => setOpen(false)} className="flex min-h-[44px] items-center justify-center text-sm text-brand">
                     登录
                   </Link>
-                  <Link href="/register" onClick={() => setOpen(false)} className={cn(JOIN_CTA, 'w-full')}>
+                  <Link href="/register" onClick={() => setOpen(false)} className={cn(JOIN_CTA, 'w-full min-h-[44px]')}>
                     加入我们
                   </Link>
                 </div>

@@ -5,7 +5,7 @@ import { FormEvent, useEffect, useMemo, useState } from "react";
 import { Feather, Filter, PenSquare, X, CheckCircle2, AlertTriangle, Send } from "lucide-react";
 import { useAuth } from "@/components/AuthProvider";
 import { toast } from "sonner";
-import { PageShell, GlassCard, Button, ButtonLink, EmptyState } from "@/components/ui";
+import { PageShell, GlassCard, Button, ButtonLink, EmptyState, ResponsiveTabs } from "@/components/ui";
 
 type StoryRecord = {
   id: string;
@@ -147,25 +147,12 @@ export default function AlumniStoriesPage() {
             <Filter size={14} />
             TAG FILTER
           </div>
-          <div className="flex flex-wrap gap-2">
-            {allTags.map((tag) => {
-              const isActive = tag === activeTag;
-              return (
-                <button
-                  key={tag}
-                  type="button"
-                  onClick={() => setActiveTag(tag)}
-                  className={`rounded-full border px-3 py-1.5 text-xs transition md:text-sm cursor-pointer ${
-                    isActive
-                      ? "border-brand bg-brand/10 text-brand"
-                      : "border-line bg-surface/50 text-brand-fg/60 hover:border-brand/40 hover:text-brand"
-                  }`}
-                >
-                  {tag}
-                </button>
-              );
-            })}
-          </div>
+          <ResponsiveTabs
+            tabs={allTags.map((tag) => ({ id: tag, label: tag }))}
+            activeTab={activeTag}
+            onChange={setActiveTag}
+            className="mb-1 border-none"
+          />
         </div>
 
         {loading ? (
@@ -225,14 +212,19 @@ export default function AlumniStoriesPage() {
           setSubmitSuccess(false);
           setSubmitError(null);
         }}
-        className="fixed bottom-20 right-4 z-40 shadow-lg md:bottom-24 md:right-8"
+        className="fixed bottom-[calc(16px+env(safe-area-inset-bottom))] right-4 z-40 shadow-lg md:bottom-8 md:right-8 active:scale-[0.95]"
         icon={PenSquare}
       >
         我要投稿
       </Button>
 
       {isModalOpen && (
-        <div className="mobile-modal-shell fixed inset-0 z-[90] flex items-center justify-center bg-black/60 backdrop-blur-sm px-4 py-8">
+        <div 
+          className="fixed inset-0 z-[90] flex items-end sm:items-center justify-center bg-black/60 backdrop-blur-sm px-4 pb-safe sm:pb-4 animate-fade-in"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="story-modal-title"
+        >
           <button
             type="button"
             aria-label="关闭投稿窗口"
@@ -241,9 +233,9 @@ export default function AlumniStoriesPage() {
             onClick={() => setIsModalOpen(false)}
           />
 
-          <div className="relative z-10 w-full max-w-2xl rounded-modal border border-line bg-surface p-5 shadow-lg backdrop-blur-xl md:p-6">
+          <div className="relative z-10 w-full max-w-2xl rounded-modal border border-line bg-surface p-5 shadow-lg backdrop-blur-xl md:p-6 mb-4 sm:mb-0 animate-slide-in sm:animate-fade-in">
             <div className="mb-4 flex items-center justify-between gap-3 border-b border-line pb-3">
-              <h3 className="font-heading text-xl font-semibold text-brand md:text-2xl">投稿投递舱</h3>
+              <h3 id="story-modal-title" className="font-heading text-xl font-semibold text-brand md:text-2xl">投稿投递舱</h3>
               <button
                 type="button"
                 onClick={() => setIsModalOpen(false)}
@@ -315,7 +307,7 @@ export default function AlumniStoriesPage() {
                   value={draft.title}
                   onChange={(event) => setDraft((prev) => ({ ...prev, title: event.target.value }))}
                   placeholder="标题（例：大学避坑指南）"
-                  className="input w-full"
+                  className="input w-full bg-white"
                 />
 
                 <div className="grid gap-3 md:grid-cols-2">
@@ -326,7 +318,7 @@ export default function AlumniStoriesPage() {
                     value={draft.author}
                     onChange={(event) => setDraft((prev) => ({ ...prev, author: event.target.value }))}
                     placeholder="作者（姓名 / 届别）"
-                    className="input w-full"
+                    className="input w-full bg-white"
                   />
 
                   <select
@@ -334,7 +326,7 @@ export default function AlumniStoriesPage() {
                     aria-label="选择标签"
                     tabIndex={0}
                     onChange={(event) => setDraft((prev) => ({ ...prev, tag: event.target.value }))}
-                    className="input w-full"
+                    className="input w-full bg-white"
                   >
                     <option value="专业真相">专业真相</option>
                     <option value="避坑指南">避坑指南</option>
@@ -351,7 +343,7 @@ export default function AlumniStoriesPage() {
                   value={draft.content}
                   onChange={(event) => setDraft((prev) => ({ ...prev, content: event.target.value }))}
                   placeholder="请输入稿件正文"
-                  className="input w-full resize-y"
+                  className="input w-full resize-y bg-white"
                 />
 
                 <input
@@ -360,7 +352,7 @@ export default function AlumniStoriesPage() {
                   tabIndex={0}
                   onChange={(event) => setDraft((prev) => ({ ...prev, contact: event.target.value }))}
                   placeholder="联系方式（可选，微信号/邮箱）"
-                  className="input w-full"
+                  className="input w-full bg-white"
                 />
 
                 {submitError && (
@@ -372,7 +364,7 @@ export default function AlumniStoriesPage() {
                 <Button
                   type="submit"
                   disabled={submitting}
-                  className="w-full justify-center"
+                  className="w-full justify-center min-h-[44px]"
                 >
                   <Send size={17} />
                   {submitting ? "投递中..." : "提交投稿到母港"}

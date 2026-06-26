@@ -367,7 +367,9 @@ export default function AdminAlumniPage() {
             className="input w-full pl-9"
           />
         </div>
+        <label htmlFor="class-filter-input" className="sr-only">按届别筛选</label>
         <input
+          id="class-filter-input"
           type="text"
           placeholder="按届别筛选"
           value={classFilter}
@@ -445,13 +447,13 @@ export default function AdminAlumniPage() {
                 <th className="px-4 py-3 font-medium">姓名</th>
                 <th className="px-4 py-3 font-medium">届别</th>
                 <th className="px-4 py-3 font-medium">班级</th>
-                <th className="px-4 py-3 font-medium">邮箱</th>
-                <th className="px-4 py-3 font-medium">联系方式</th>
-                <th className="px-4 py-3 font-medium">城市</th>
-                <th className="px-4 py-3 font-medium">院校</th>
-                <th className="px-4 py-3 font-medium">专业</th>
-                <th className="px-4 py-3 font-medium">行业</th>
-                <th className="px-4 py-3 font-medium">添加时间</th>
+                <th className="px-4 py-3 font-medium hidden md:table-cell">邮箱</th>
+                <th className="px-4 py-3 font-medium hidden lg:table-cell">联系方式</th>
+                <th className="px-4 py-3 font-medium hidden sm:table-cell">城市</th>
+                <th className="px-4 py-3 font-medium hidden sm:table-cell">院校</th>
+                <th className="px-4 py-3 font-medium hidden lg:table-cell">专业</th>
+                <th className="px-4 py-3 font-medium hidden lg:table-cell">行业</th>
+                <th className="px-4 py-3 font-medium hidden xl:table-cell">添加时间</th>
                 <th className="w-24 px-4 py-3 font-medium">操作</th>
               </tr>
             </thead>
@@ -464,33 +466,33 @@ export default function AdminAlumniPage() {
                   <td className="px-4 py-3 font-medium text-[#4C1D95]">{item.name}</td>
                   <td className="px-4 py-3 text-[#4C1D95]/60">{item.graduationClass || '-'}</td>
                   <td className="px-4 py-3 text-[#4C1D95]/60">{item.className || '-'}</td>
-                  <td className="px-4 py-3 text-[#4C1D95]/60">{item.email || '-'}</td>
-                  <td className="px-4 py-3 text-[#4C1D95]/60">{item.contact || '-'}</td>
-                  <td className="px-4 py-3 text-[#4C1D95]/60">{item.city || '-'}</td>
-                  <td className="max-w-[120px] truncate px-4 py-3 text-[#4C1D95]/60">
+                  <td className="px-4 py-3 text-[#4C1D95]/60 hidden md:table-cell">{item.email || '-'}</td>
+                  <td className="px-4 py-3 text-[#4C1D95]/60 hidden lg:table-cell">{item.contact || '-'}</td>
+                  <td className="px-4 py-3 text-[#4C1D95]/60 hidden sm:table-cell">{item.city || '-'}</td>
+                  <td className="max-w-[120px] truncate px-4 py-3 text-[#4C1D95]/60 hidden sm:table-cell">
                     {item.university || '-'}
                   </td>
-                  <td className="max-w-[120px] truncate px-4 py-3 text-[#4C1D95]/60">
+                  <td className="max-w-[120px] truncate px-4 py-3 text-[#4C1D95]/60 hidden lg:table-cell">
                     {item.major || '-'}
                   </td>
-                  <td className="max-w-[120px] truncate px-4 py-3 text-[#4C1D95]/60">
+                  <td className="max-w-[120px] truncate px-4 py-3 text-[#4C1D95]/60 hidden lg:table-cell">
                     {item.industry || '-'}
                   </td>
-                  <td className="px-4 py-3 text-xs text-[#4C1D95]/40">
+                  <td className="px-4 py-3 text-xs text-[#4C1D95]/40 hidden xl:table-cell">
                     {new Date(item.createdAt).toLocaleDateString('zh-CN')}
                   </td>
                   <td className="px-4 py-3">
                     <div className="flex items-center gap-1">
                       <button
                         onClick={() => openEdit(item)}
-                        className="inline-flex cursor-pointer items-center rounded-lg p-1.5 text-[#7C3AED]/50 transition hover:bg-[#7C3AED]/10 hover:text-[#7C3AED]"
+                        className="inline-flex cursor-pointer items-center rounded-lg p-1.5 text-[#7C3AED]/50 transition hover:bg-[#7C3AED]/10 hover:text-[#7C3AED] min-h-[32px] min-w-[32px] justify-center"
                         title="编辑"
                       >
                         <Edit2 size={14} />
                       </button>
                       <button
                         onClick={() => setDeleteTarget(item)}
-                        className="inline-flex cursor-pointer items-center rounded-lg p-1.5 text-rose-400/60 transition hover:bg-rose-50 hover:text-rose-600"
+                        className="inline-flex cursor-pointer items-center rounded-lg p-1.5 text-rose-400/60 transition hover:bg-rose-50 hover:text-rose-600 min-h-[32px] min-w-[32px] justify-center"
                         title="删除"
                       >
                         <Trash2 size={14} />
@@ -529,12 +531,17 @@ export default function AdminAlumniPage() {
 
       {/* 新增/编辑弹窗 */}
       {showForm && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center px-4">
+        <div 
+          className="fixed inset-0 z-50 flex items-end sm:items-center justify-center px-4 pb-safe sm:pb-4 animate-fade-in"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="form-modal-title"
+        >
           <div
             className="absolute inset-0 bg-[#4C1D95]/20 backdrop-blur-sm"
             onClick={() => !formSaving && setShowForm(false)}
           />
-          <div className="relative max-h-[90vh] w-full max-w-md overflow-y-auto rounded-2xl border border-[#7C3AED]/10 bg-white p-6 shadow-xl">
+          <div className="relative max-h-[90vh] w-full max-w-md overflow-y-auto rounded-2xl border border-[#7C3AED]/10 bg-white p-6 shadow-xl z-10 animate-slide-in sm:animate-fade-in mb-4 sm:mb-0">
             <button
               onClick={() => !formSaving && setShowForm(false)}
               aria-label="关闭表单"
@@ -542,118 +549,128 @@ export default function AdminAlumniPage() {
             >
               <X size={18} />
             </button>
-            <h2 className="font-heading text-lg font-bold text-[#4C1D95]">
+            <h2 id="form-modal-title" className="font-heading text-lg font-bold text-[#4C1D95]">
               {editingId ? '编辑校友' : '新增校友'}
             </h2>
 
             <div className="mt-5 space-y-4">
               <div>
-                <label className="mb-1 block text-sm font-medium text-[#4C1D95]">姓名 *</label>
+                <label htmlFor="form-name" className="mb-1 block text-sm font-medium text-[#4C1D95]">姓名 *</label>
                 <input
+                  id="form-name"
                   type="text"
                   value={formName}
                   onChange={(e) => setFormName(e.target.value)}
-                  className="input w-full"
+                  className="input w-full bg-white"
                   placeholder="请输入姓名"
                   disabled={formSaving}
                   autoFocus
                 />
               </div>
               <div>
-                <label className="mb-1 block text-sm font-medium text-[#4C1D95]">届别</label>
+                <label htmlFor="form-class" className="mb-1 block text-sm font-medium text-[#4C1D95]">届别</label>
                 <input
+                  id="form-class"
                   type="text"
                   value={formClass}
                   onChange={(e) => setFormClass(e.target.value)}
-                  className="input w-full"
+                  className="input w-full bg-white"
                   placeholder="例如：2020"
                   disabled={formSaving}
                 />
               </div>
               <div>
-                <label className="mb-1 block text-sm font-medium text-[#4C1D95]">班级</label>
+                <label htmlFor="form-classname" className="mb-1 block text-sm font-medium text-[#4C1D95]">班级</label>
                 <input
+                  id="form-classname"
                   type="text"
                   value={formClassName}
                   onChange={(e) => setFormClassName(e.target.value)}
-                  className="input w-full"
+                  className="input w-full bg-white"
                   placeholder="例如：1"
                   disabled={formSaving}
                 />
               </div>
               <div>
-                <label className="mb-1 block text-sm font-medium text-[#4C1D95]">邮箱</label>
+                <label htmlFor="form-email" className="mb-1 block text-sm font-medium text-[#4C1D95]">邮箱</label>
                 <input
+                  id="form-email"
                   type="email"
                   value={formEmail}
                   onChange={(e) => setFormEmail(e.target.value)}
-                  className="input w-full"
+                  className="input w-full bg-white"
                   placeholder="用于区分同名同届校友"
                   disabled={formSaving}
                 />
               </div>
               <div>
-                <label className="mb-1 block text-sm font-medium text-[#4C1D95]">联系方式</label>
+                <label htmlFor="form-contact" className="mb-1 block text-sm font-medium text-[#4C1D95]">联系方式</label>
                 <input
+                  id="form-contact"
                   type="text"
                   value={formContact}
                   onChange={(e) => setFormContact(e.target.value)}
-                  className="input w-full"
+                  className="input w-full bg-white"
                   placeholder="手机号或微信"
                   disabled={formSaving}
                 />
               </div>
               <div>
-                <label className="mb-1 block text-sm font-medium text-[#4C1D95]">城市</label>
+                <label htmlFor="form-city" className="mb-1 block text-sm font-medium text-[#4C1D95]">城市</label>
                 <input
+                  id="form-city"
                   type="text"
                   value={formCity}
                   onChange={(e) => setFormCity(e.target.value)}
-                  className="input w-full"
+                  className="input w-full bg-white"
                   placeholder="例如：深圳"
                   disabled={formSaving}
                 />
               </div>
               <div>
-                <label className="mb-1 block text-sm font-medium text-[#4C1D95]">院校</label>
+                <label htmlFor="form-university" className="mb-1 block text-sm font-medium text-[#4C1D95]">院校</label>
                 <input
+                  id="form-university"
                   type="text"
                   value={formUniversity}
                   onChange={(e) => setFormUniversity(e.target.value)}
-                  className="input w-full"
+                  className="input w-full bg-white"
                   placeholder="例如：北京大学"
                   disabled={formSaving}
                 />
               </div>
               <div>
-                <label className="mb-1 block text-sm font-medium text-[#4C1D95]">专业</label>
+                <label htmlFor="form-major" className="mb-1 block text-sm font-medium text-[#4C1D95]">专业</label>
                 <input
+                  id="form-major"
                   type="text"
                   value={formMajor}
                   onChange={(e) => setFormMajor(e.target.value)}
-                  className="input w-full"
+                  className="input w-full bg-white"
                   placeholder="例如：计算机科学"
                   disabled={formSaving}
                 />
               </div>
               <div>
-                <label className="mb-1 block text-sm font-medium text-[#4C1D95]">行业</label>
+                <label htmlFor="form-industry" className="mb-1 block text-sm font-medium text-[#4C1D95]">行业</label>
                 <input
+                  id="form-industry"
                   type="text"
                   value={formIndustry}
                   onChange={(e) => setFormIndustry(e.target.value)}
-                  className="input w-full"
+                  className="input w-full bg-white"
                   placeholder="例如：互联网"
                   disabled={formSaving}
                 />
               </div>
               <div>
-                <label className="mb-1 block text-sm font-medium text-[#4C1D95]">证书编号</label>
+                <label htmlFor="form-certno" className="mb-1 block text-sm font-medium text-[#4C1D95]">证书编号</label>
                 <input
+                  id="form-certno"
                   type="text"
                   value={formCertNo}
                   onChange={(e) => setFormCertNo(e.target.value)}
-                  className="input w-full"
+                  className="input w-full bg-white"
                   placeholder="可选，如 YC-2022-001"
                   disabled={formSaving}
                 />
@@ -669,18 +686,18 @@ export default function AdminAlumniPage() {
                 </div>
               )}
 
-              <div className="flex justify-end gap-3 pt-2">
+              <div className="flex flex-col-reverse sm:flex-row justify-end gap-3 pt-2">
                 <button
                   onClick={() => setShowForm(false)}
                   disabled={formSaving}
-                  className="cursor-pointer rounded-xl border border-gray-200 px-4 py-2 text-sm text-[#4C1D95]/60 transition hover:bg-gray-50 disabled:opacity-50"
+                  className="w-full sm:w-auto min-h-[44px] sm:min-h-0 cursor-pointer rounded-xl border border-gray-200 px-4 py-2 text-sm text-[#4C1D95]/60 transition hover:bg-gray-50 disabled:opacity-50"
                 >
                   取消
                 </button>
                 <button
                   onClick={handleSave}
                   disabled={formSaving}
-                  className="inline-flex cursor-pointer items-center gap-1.5 rounded-xl border border-[#7C3AED]/20 bg-[#7C3AED]/5 px-4 py-2 text-sm text-[#7C3AED] transition hover:bg-[#7C3AED]/10 disabled:opacity-50"
+                  className="inline-flex w-full sm:w-auto min-h-[44px] sm:min-h-0 items-center justify-center gap-1.5 rounded-xl border border-[#7C3AED]/20 bg-[#7C3AED]/5 px-4 py-2 text-sm text-[#7C3AED] transition hover:bg-[#7C3AED]/10 disabled:opacity-50"
                 >
                   {formSaving && <Loader2 size={14} className="animate-spin" />}
                   {editingId ? '保存' : '新增'}
@@ -693,18 +710,23 @@ export default function AdminAlumniPage() {
 
       {/* 删除确认弹窗 */}
       {deleteTarget && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center px-4">
+        <div 
+          className="fixed inset-0 z-50 flex items-end sm:items-center justify-center px-4 pb-safe sm:pb-4 animate-fade-in"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="delete-modal-title"
+        >
           <div
             className="absolute inset-0 bg-[#4C1D95]/20 backdrop-blur-sm"
             onClick={() => !deleting && setDeleteTarget(null)}
           />
-          <div className="relative w-full max-w-sm rounded-2xl border border-rose-100 bg-white p-6 shadow-xl">
+          <div className="relative w-full max-w-sm rounded-2xl border border-rose-100 bg-white p-6 shadow-xl z-10 animate-slide-in sm:animate-fade-in mb-4 sm:mb-0">
             <div className="flex items-start gap-3">
               <div className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-rose-50 text-rose-500">
                 <AlertTriangle size={20} />
               </div>
               <div>
-                <h2 className="font-heading text-lg font-bold text-[#4C1D95]">确认删除</h2>
+                <h2 id="delete-modal-title" className="font-heading text-lg font-bold text-[#4C1D95]">确认删除</h2>
                 <p className="mt-1 text-sm leading-6 text-[#4C1D95]/60">
                   确定要删除 <strong>{deleteTarget.name}</strong>
                   {deleteTarget.graduationClass ? `（${deleteTarget.graduationClass}）` : ''}
@@ -712,18 +734,18 @@ export default function AdminAlumniPage() {
                 </p>
               </div>
             </div>
-            <div className="mt-5 flex justify-end gap-3">
+            <div className="mt-5 flex flex-col-reverse sm:flex-row justify-end gap-3">
               <button
                 onClick={() => setDeleteTarget(null)}
                 disabled={deleting}
-                className="cursor-pointer rounded-xl border border-gray-200 px-4 py-2 text-sm text-[#4C1D95]/60 transition hover:bg-gray-50 disabled:opacity-50"
+                className="w-full sm:w-auto min-h-[44px] sm:min-h-0 cursor-pointer rounded-xl border border-gray-200 px-4 py-2 text-sm text-[#4C1D95]/60 transition hover:bg-gray-50 disabled:opacity-50"
               >
                 取消
               </button>
               <button
                 onClick={handleDelete}
                 disabled={deleting}
-                className="inline-flex cursor-pointer items-center gap-1.5 rounded-xl border border-rose-200 bg-rose-50 px-4 py-2 text-sm text-rose-600 transition hover:bg-rose-100 disabled:opacity-50"
+                className="inline-flex w-full sm:w-auto min-h-[44px] sm:min-h-0 items-center justify-center gap-1.5 rounded-xl border border-rose-200 bg-rose-50 px-4 py-2 text-sm text-rose-600 transition hover:bg-rose-100 disabled:opacity-50"
               >
                 {deleting && <Loader2 size={14} className="animate-spin" />}
                 确认删除

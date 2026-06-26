@@ -125,6 +125,7 @@ export default function UserClaimsPage() {
               </div>
 
               <div className="mt-3">
+                <label htmlFor={`note-${claim.id}`} className="sr-only">管理员备注说明</label>
                 <textarea
                   id={`note-${claim.id}`}
                   className="input w-full min-h-[80px] rounded-btn bg-surface-muted/50 border-line text-brand-fg"

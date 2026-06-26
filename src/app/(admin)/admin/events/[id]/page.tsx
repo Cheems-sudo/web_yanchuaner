@@ -176,8 +176,9 @@ export default function AdminEventsEditPage() {
 
       <form onSubmit={handleSubmit} className="space-y-6 rounded-2xl border border-[#7C3AED]/10 bg-white/50 p-6 backdrop-blur-sm">
         <div>
-          <label className="mb-1.5 block text-sm font-medium text-[#4C1D95]">标题 *</label>
+          <label htmlFor="title" className="mb-1.5 block text-sm font-medium text-[#4C1D95]">标题 *</label>
           <input
+            id="title"
             type="text"
             value={form.title}
             onChange={(e) => setForm((prev) => ({ ...prev, title: e.target.value }))}
@@ -187,8 +188,9 @@ export default function AdminEventsEditPage() {
         </div>
 
         <div>
-          <label className="mb-1.5 block text-sm font-medium text-[#4C1D95]">摘要</label>
+          <label htmlFor="summary" className="mb-1.5 block text-sm font-medium text-[#4C1D95]">摘要</label>
           <textarea
+            id="summary"
             value={form.summary}
             onChange={(e) => setForm((prev) => ({ ...prev, summary: e.target.value }))}
             className="input w-full"
@@ -198,8 +200,9 @@ export default function AdminEventsEditPage() {
         </div>
 
         <div>
-          <label className="mb-1.5 block text-sm font-medium text-[#4C1D95]">正文 *</label>
+          <label htmlFor="content" className="mb-1.5 block text-sm font-medium text-[#4C1D95]">正文 *</label>
           <textarea
+            id="content"
             value={form.content}
             onChange={(e) => setForm((prev) => ({ ...prev, content: e.target.value }))}
             className="input w-full"
@@ -210,8 +213,9 @@ export default function AdminEventsEditPage() {
 
         <div className="grid gap-6 sm:grid-cols-2">
           <div>
-            <label className="mb-1.5 block text-sm font-medium text-[#4C1D95]">活动时间 *</label>
+            <label htmlFor="eventDate" className="mb-1.5 block text-sm font-medium text-[#4C1D95]">活动时间 *</label>
             <input
+              id="eventDate"
               type="datetime-local"
               value={form.eventDate}
               onChange={(e) => setForm((prev) => ({ ...prev, eventDate: e.target.value }))}
@@ -220,8 +224,9 @@ export default function AdminEventsEditPage() {
           </div>
 
           <div>
-            <label className="mb-1.5 block text-sm font-medium text-[#4C1D95]">结束时间</label>
+            <label htmlFor="endDate" className="mb-1.5 block text-sm font-medium text-[#4C1D95]">结束时间</label>
             <input
+              id="endDate"
               type="datetime-local"
               value={form.endDate}
               onChange={(e) => setForm((prev) => ({ ...prev, endDate: e.target.value }))}
@@ -230,8 +235,9 @@ export default function AdminEventsEditPage() {
           </div>
 
           <div>
-            <label className="mb-1.5 block text-sm font-medium text-[#4C1D95]">地点</label>
+            <label htmlFor="location" className="mb-1.5 block text-sm font-medium text-[#4C1D95]">地点</label>
             <input
+              id="location"
               type="text"
               value={form.location}
               onChange={(e) => setForm((prev) => ({ ...prev, location: e.target.value }))}
@@ -241,8 +247,9 @@ export default function AdminEventsEditPage() {
           </div>
 
           <div>
-            <label className="mb-1.5 block text-sm font-medium text-[#4C1D95]">报名人数上限</label>
+            <label htmlFor="maxAttendees" className="mb-1.5 block text-sm font-medium text-[#4C1D95]">报名人数上限</label>
             <input
+              id="maxAttendees"
               type="number"
               min="1"
               value={form.maxAttendees}
@@ -254,12 +261,13 @@ export default function AdminEventsEditPage() {
         </div>
 
         <div>
-          <label className="mb-1.5 block text-sm font-medium text-[#4C1D95]">封面图片</label>
+          <label htmlFor="coverImage" className="mb-1.5 block text-sm font-medium text-[#4C1D95]">封面图片</label>
           <div className="flex items-center gap-4">
             <label className="inline-flex cursor-pointer items-center gap-2 rounded-xl border border-[#7C3AED]/20 bg-[#7C3AED]/5 px-4 py-2.5 text-sm text-[#7C3AED] transition hover:bg-[#7C3AED]/10">
               <Upload size={16} />
               {uploading ? '上传中...' : '选择图片'}
               <input
+                id="coverImage"
                 type="file"
                 accept="image/jpeg,image/png,image/webp,image/gif"
                 onChange={handleImageUpload}
@@ -294,8 +302,9 @@ export default function AdminEventsEditPage() {
         </div>
 
         <div>
-          <label className="mb-1.5 block text-sm font-medium text-[#4C1D95]">状态</label>
+          <label htmlFor="status" className="mb-1.5 block text-sm font-medium text-[#4C1D95]">状态</label>
           <select
+            id="status"
             value={form.status}
             onChange={(e) => setForm((prev) => ({ ...prev, status: e.target.value }))}
             className="input w-full"

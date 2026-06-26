@@ -18,4 +18,6 @@ export { EmptyState } from "./EmptyState";
 export { DisclaimerBanner } from "./DisclaimerBanner";
 export { InteractiveStarfield } from "./InteractiveStarfield";
 export { RevealSection } from "./RevealSection";
+export { ResponsiveTabs } from "./ResponsiveTabs";
+export type { TabItem } from "./ResponsiveTabs";
 

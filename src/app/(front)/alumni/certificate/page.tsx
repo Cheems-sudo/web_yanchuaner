@@ -869,7 +869,7 @@ export default function AlumniCertificatePage() {
             </div>
           </div>
 
-          <div className="mt-5 flex flex-col items-center justify-center gap-3 border-t border-[#7C3AED]/10 pt-4 pb-0 md:flex-row">
+          <div className="mt-5 flex flex-col items-center justify-center gap-3 border-t border-[#7C3AED]/10 pt-4 pb-safe md:flex-row">
             <button
               type="button"
               onClick={handleGenerate}

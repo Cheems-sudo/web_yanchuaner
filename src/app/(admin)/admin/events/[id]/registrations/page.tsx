@@ -177,8 +177,8 @@ export default function AdminEventRegistrationsPage() {
                 <th className="px-4 py-3 font-medium w-12">#</th>
                 <th className="px-4 py-3 font-medium">姓名</th>
                 <th className="px-4 py-3 font-medium">联系方式</th>
-                <th className="px-4 py-3 font-medium">留言</th>
-                <th className="px-4 py-3 font-medium">报名时间</th>
+                <th className="px-4 py-3 font-medium hidden sm:table-cell">留言</th>
+                <th className="px-4 py-3 font-medium hidden md:table-cell">报名时间</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-[#7C3AED]/5">
@@ -187,8 +187,8 @@ export default function AdminEventRegistrationsPage() {
                   <td className="px-4 py-3 text-[#4C1D95]/40">{i + 1}</td>
                   <td className="px-4 py-3 font-medium text-[#4C1D95]">{r.name}</td>
                   <td className="px-4 py-3">{r.contact || '-'}</td>
-                  <td className="px-4 py-3 max-w-xs truncate">{r.message || '-'}</td>
-                  <td className="px-4 py-3 whitespace-nowrap">
+                  <td className="px-4 py-3 max-w-xs truncate hidden sm:table-cell">{r.message || '-'}</td>
+                  <td className="px-4 py-3 whitespace-nowrap hidden md:table-cell">
                     {new Date(r.createdAt).toLocaleString('zh-CN', { timeZone: 'Asia/Shanghai' })}
                   </td>
                 </tr>
