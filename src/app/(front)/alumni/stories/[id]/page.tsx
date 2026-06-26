@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft, Feather } from "lucide-react";
 import { GlassCard } from "@/components/ui";
+import prisma from "@/lib/db";
 
 type StoryDetail = {
   id: string;
@@ -12,16 +13,18 @@ type StoryDetail = {
   tags: string[];
   body: string;
   date: string;
-  status: string;
 };
 
-async function getStory(id: string) {
+async function getStory(id: string): Promise<StoryDetail | null> {
   try {
-    const baseUrl = process.env.APP_URL || "http://localhost:3000";
-    const res = await fetch(`${baseUrl}/api/stories/${id}`, { cache: "no-store" });
-    if (!res.ok) return null;
-    const data = await res.json();
-    return data.story as StoryDetail;
+    const story = await prisma.story.findUnique({
+      where: { id, status: "PUBLISHED" },
+      select: { id: true, title: true, author: true, tags: true, body: true, date: true },
+    });
+    if (!story) return null;
+    let tags: string[] = [];
+    try { tags = JSON.parse(story.tags || "[]"); } catch {}
+    return { ...story, tags };
   } catch {
     return null;
   }
