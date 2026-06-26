@@ -2,7 +2,9 @@
 
 import Link from "next/link";
 import { FormEvent, useEffect, useMemo, useState } from "react";
-import { Feather, Filter, Mail, PenSquare, X } from "lucide-react";
+import { Feather, Filter, Mail, PenSquare, X, CheckCircle2, AlertTriangle, Send } from "lucide-react";
+import { useAuth } from "@/components/AuthProvider";
+import { toast } from "sonner";
 
 type StoryRecord = {
   id: string;
@@ -21,8 +23,6 @@ type DraftState = {
   contact: string;
 };
 
-const STORY_EMAIL = "yanchuan_alumni@163.com";
-
 const initialDraft: DraftState = {
   title: "",
   author: "",
@@ -40,12 +40,15 @@ function formatDate(isoDate: string) {
 }
 
 export default function AlumniStoriesPage() {
+  const { user } = useAuth();
   const [stories, setStories] = useState<StoryRecord[]>([]);
   const [loading, setLoading] = useState(true);
   const [activeTag, setActiveTag] = useState("全部");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [draft, setDraft] = useState<DraftState>(initialDraft);
-  const [hasTriggeredMail, setHasTriggeredMail] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [submitSuccess, setSubmitSuccess] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
 
   useEffect(() => {
     fetch('/api/stories')
@@ -72,33 +75,50 @@ export default function AlumniStoriesPage() {
     return stories.filter((story) => story.tags.includes(activeTag));
   }, [activeTag, stories]);
 
-  const submitByMail = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    if (!draft.title.trim() || !draft.content.trim()) {
+      toast.error("标题和正文不能为空");
+      return;
+    }
 
-    const subject = encodeURIComponent(
-      `[燕川故事投稿] ${draft.title.trim() || "未命名稿件"}`
-    );
+    setSubmitting(true);
+    setSubmitError(null);
 
-    const bodyText = [
-      "【投稿人】",
-      draft.author.trim() || "未填写",
-      "",
-      "【标签】",
-      draft.tag.trim() || "未填写",
-      "",
-      "【联系方式】",
-      draft.contact.trim() || "未填写",
-      "",
-      "【稿件正文】",
-      draft.content.trim() || "未填写",
-      "",
-      "【备注】",
-      "本稿件仅在站长人工审核后才会发布到静态站点。",
-    ].join("\n");
+    const bodyText = draft.content.trim() + (draft.contact.trim() ? `\n\n【联系方式】\n${draft.contact.trim()}` : "");
 
-    const mailtoUrl = `mailto:${STORY_EMAIL}?subject=${subject}&body=${encodeURIComponent(bodyText)}`;
-    window.location.href = mailtoUrl;
-    setHasTriggeredMail(true);
+    const payload = {
+      title: draft.title.trim(),
+      body: bodyText,
+      author: draft.author.trim() || undefined,
+      tags: [draft.tag],
+      date: new Date().toISOString().slice(0, 10),
+    };
+
+    try {
+      const res = await fetch("/api/stories", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      const data = await res.json();
+      if (res.ok && data.story) {
+        setSubmitSuccess(true);
+        setDraft(initialDraft);
+        toast.success("投稿提交成功，已进入审核队列！");
+      } else {
+        const errMsg = data.error || "提交失败，请稍后重试";
+        setSubmitError(errMsg);
+        toast.error(errMsg);
+      }
+    } catch (error) {
+      console.error("Story submission error:", error);
+      setSubmitError("网络请求失败，请稍后重试");
+      toast.error("网络请求失败，请稍后重试");
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -188,12 +208,13 @@ export default function AlumniStoriesPage() {
         type="button"
         onClick={() => {
           setIsModalOpen(true);
-          setHasTriggeredMail(false);
+          setSubmitSuccess(false);
+          setSubmitError(null);
         }}
         className="btn-primary fixed bottom-20 right-4 z-40 px-5 py-3 shadow-lg ring-1 ring-emerald-500/30 hover:ring-emerald-500/50 md:bottom-24 md:right-8"
       >
         <PenSquare size={16} />
-        {"写信给母港"}
+        {"我要投稿"}
       </button>
 
       {isModalOpen ? (
@@ -221,78 +242,126 @@ export default function AlumniStoriesPage() {
             </div>
 
             <p className="text-sm leading-7 text-gray-600 md:text-base">
-              {"投稿不会写入任何数据库。点击“以邮件投递”后，将调起本地邮箱发送给站长。稿件仅在审核合规后才会收录。"}
+              {"您的投稿在经管理员审核合规后，将会正式收录并展示在“燕中故事”板块中。"}
             </p>
 
-            <form className="mt-4 space-y-3" onSubmit={submitByMail}>
-              <input
-                required
-                aria-label="稿件标题"
-                tabIndex={0}
-                value={draft.title}
-                onChange={(event) => setDraft((prev) => ({ ...prev, title: event.target.value }))}
-                placeholder={"标题（例：大学避坑指南）"}
-                className="input w-full"
-              />
-
-              <div className="grid gap-3 md:grid-cols-2">
+            {!(user && (user.role === 'ADMIN' || (user.role === 'ALUMNI' && user.status === 'VERIFIED'))) ? (
+              <div className="mt-4 rounded-xl border border-amber-500/20 bg-amber-500/5 p-5 text-center space-y-3">
+                <div className="flex justify-center text-amber-500">
+                  <AlertTriangle size={32} />
+                </div>
+                <h4 className="font-semibold text-amber-600">投稿权限受限</h4>
+                <p className="text-xs leading-5 text-gray-600">
+                  只有通过校友身份认证的用户才能在此提交故事投稿。您当前处于未认证状态。
+                </p>
+                <div className="pt-1">
+                  <Link href="/me" className="btn-secondary py-1 px-4 text-xs">
+                    前往个人中心申请认证
+                  </Link>
+                </div>
+              </div>
+            ) : submitSuccess ? (
+              <div className="mt-4 rounded-xl border border-emerald-500/20 bg-emerald-500/5 p-6 text-center space-y-4">
+                <div className="flex justify-center text-emerald-500">
+                  <CheckCircle2 size={40} className="animate-in zoom-in duration-300" />
+                </div>
+                <h4 className="font-bold text-emerald-600">投递成功！</h4>
+                <p className="text-xs leading-5 text-gray-600">
+                  您的文章已进入审核队列，请等待管理员审核。
+                </p>
+                <div className="pt-2 flex justify-center gap-3">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setSubmitSuccess(false);
+                      setDraft(initialDraft);
+                    }}
+                    className="btn-secondary text-xs"
+                  >
+                    再写一篇
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setIsModalOpen(false)}
+                    className="btn-primary text-xs"
+                  >
+                    返回列表
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <form className="mt-4 space-y-3" onSubmit={handleSubmit}>
                 <input
                   required
-                  aria-label="作者"
+                  aria-label="稿件标题"
                   tabIndex={0}
-                  value={draft.author}
-                  onChange={(event) => setDraft((prev) => ({ ...prev, author: event.target.value }))}
-                  placeholder={"作者（姓名 / 届别）"}
+                  value={draft.title}
+                  onChange={(event) => setDraft((prev) => ({ ...prev, title: event.target.value }))}
+                  placeholder={"标题（例：大学避坑指南）"}
                   className="input w-full"
                 />
 
-                <select
-                  value={draft.tag}
-                  aria-label="选择标签"
+                <div className="grid gap-3 md:grid-cols-2">
+                  <input
+                    required
+                    aria-label="作者"
+                    tabIndex={0}
+                    value={draft.author}
+                    onChange={(event) => setDraft((prev) => ({ ...prev, author: event.target.value }))}
+                    placeholder={"作者（姓名 / 届别）"}
+                    className="input w-full"
+                  />
+
+                  <select
+                    value={draft.tag}
+                    aria-label="选择标签"
+                    tabIndex={0}
+                    onChange={(event) => setDraft((prev) => ({ ...prev, tag: event.target.value }))}
+                    className="input w-full"
+                  >
+                    <option value="专业真相">{"专业真相"}</option>
+                    <option value="避坑指南">{"避坑指南"}</option>
+                    <option value="校园回忆">{"校园回忆"}</option>
+                    <option value="青春寄语">{"青春寄语"}</option>
+                  </select>
+                </div>
+
+                <textarea
+                  required
+                  rows={7}
+                  aria-label="稿件正文"
                   tabIndex={0}
-                  onChange={(event) => setDraft((prev) => ({ ...prev, tag: event.target.value }))}
+                  value={draft.content}
+                  onChange={(event) => setDraft((prev) => ({ ...prev, content: event.target.value }))}
+                  placeholder={"请输入稿件正文"}
+                  className="input w-full resize-y"
+                />
+
+                <input
+                  value={draft.contact}
+                  aria-label="联系方式"
+                  tabIndex={0}
+                  onChange={(event) => setDraft((prev) => ({ ...prev, contact: event.target.value }))}
+                  placeholder={"联系方式（可选）"}
                   className="input w-full"
+                />
+
+                {submitError && (
+                  <div className="rounded-xl border border-rose-200 bg-rose-50 px-4 py-2 text-xs text-rose-700">
+                    ⚠️ {submitError}
+                  </div>
+                )}
+
+                <button
+                  type="submit"
+                  disabled={submitting}
+                  className="btn-primary w-full justify-center disabled:opacity-50"
                 >
-                  <option value="专业真相">{"专业真相"}</option>
-                  <option value="避坑指南">{"避坑指南"}</option>
-                  <option value="校园回忆">{"校园回忆"}</option>
-                  <option value="青春寄语">{"青春寄语"}</option>
-                </select>
-              </div>
-
-              <textarea
-                required
-                rows={7}
-                aria-label="稿件正文"
-                tabIndex={0}
-                value={draft.content}
-                onChange={(event) => setDraft((prev) => ({ ...prev, content: event.target.value }))}
-                placeholder={"请输入稿件正文"}
-                className="input w-full resize-y"
-              />
-
-              <input
-                value={draft.contact}
-                aria-label="联系方式"
-                tabIndex={0}
-                onChange={(event) => setDraft((prev) => ({ ...prev, contact: event.target.value }))}
-                placeholder={"联系方式（可选）"}
-                className="input w-full"
-              />
-
-              <button type="submit"
-                className="btn-primary w-full justify-center"
-              >
-                <Mail size={17} />
-                {"以邮件投递给站长"}
-              </button>
-            </form>
-
-            {hasTriggeredMail ? (
-              <div className="mt-4 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-800">
-                {`如果未成功唤起邮件应用，请将稿件直接发送至 ${STORY_EMAIL}。所有稿件均会经站长人工审核后再展示。`}
-              </div>
-            ) : null}
+                  <Send size={17} />
+                  {submitting ? "投递中..." : "提交投稿到母港"}
+                </button>
+              </form>
+            )}
           </div>
         </div>
       ) : null}
