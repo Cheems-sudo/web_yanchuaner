@@ -15,7 +15,7 @@ import {
   ACHIEVEMENT_CATEGORY_LABELS,
   type AchievementCategory,
 } from "@/lib/achievements";
-import AchievementSubmission from "@/components/AchievementSubmission";
+
 import {
   PageShell,
   GlassCard,
@@ -160,7 +160,7 @@ export default async function AlumniAchievementsPage({
           本页面内容由管理员整理发布，仅用于展示校友成长经历，不构成任何官方认证或商业背书。
         </DisclaimerBanner>
       </GlassCard>
-      <AchievementSubmission initialOpen={searchParams?.submit === "1"} />
+
     </PageShell>
   );
 }
