@@ -110,7 +110,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   };
 
   return (
-    <div className="flex min-h-screen bg-[#03010b]/40">
+    <div className="flex min-h-screen bg-[#03010b]">
       {/* Mobile Sidebar overlay / backdrop (Z-index: 40) */}
       {sidebarOpen && (
         <div

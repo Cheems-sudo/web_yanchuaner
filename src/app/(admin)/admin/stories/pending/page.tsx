@@ -72,17 +72,17 @@ export default function AdminStoriesPendingPage() {
           {stories.map((story) => (
             <div
               key={story.id}
-              className="cosmic-card rounded-card border border-brand/15 bg-surface/55 p-6 backdrop-blur-md shadow-sm transition hover:shadow-md"
+              className="rounded-2xl border border-purple-500/30 bg-slate-900/50 p-6 backdrop-blur-xl shadow-[0_8px_32px_rgba(124,58,237,0.08)] transition duration-300 hover:border-purple-400/50 hover:shadow-[0_8px_32px_rgba(124,58,237,0.18)] hover:-translate-y-0.5"
             >
               <div className="flex flex-wrap items-start justify-between gap-4">
                 <div className="space-y-1">
-                  <h3 className="font-heading text-lg font-bold text-brand-fg">
+                  <h3 className="font-heading text-lg font-bold text-slate-100">
                     {story.title}
                   </h3>
-                  <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5 text-xs text-brand-fg/60">
+                  <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5 text-xs text-slate-300/70">
                     <span className="flex items-center gap-1">
                       <User size={13} />
-                      署名作者: <strong className="text-brand-fg/80">{story.author}</strong>
+                      署名作者: <strong className="text-slate-200">{story.author}</strong>
                     </span>
                     <span className="flex items-center gap-1">
                       <Clock size={13} />
@@ -118,14 +118,14 @@ export default function AdminStoriesPendingPage() {
 
               {/* 提交账号详情 */}
               {story.authorUser && (
-                <div className="mt-3.5 rounded-xl bg-brand/5 border border-brand/10 p-3 text-xs text-brand-fg/70 space-y-1">
-                  <span className="font-semibold text-brand">投稿账号关联信息:</span>
+                <div className="mt-3.5 rounded-xl bg-slate-950/50 border border-purple-500/20 p-3.5 text-xs text-slate-300 space-y-1 shadow-inner">
+                  <span className="font-semibold text-purple-300">投稿账号关联信息:</span>
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 mt-1">
-                    <div>姓名: <span className="text-brand-fg/90">{story.authorUser.name || '未填写'}</span></div>
-                    <div>用户名: <span className="text-brand-fg/90">{story.authorUser.username || '未填写'}</span></div>
-                    <div>邮箱: <span className="text-brand-fg/90">{story.authorUser.email || '未填写'}</span></div>
-                    <div>届别: <span className="text-brand-fg/90">{story.authorUser.graduationClass || '未填写'}</span></div>
-                    <div>班级: <span className="text-brand-fg/90">{story.authorUser.className || '未填写'}</span></div>
+                    <div>姓名: <span className="text-slate-200">{story.authorUser.name || '未填写'}</span></div>
+                    <div>用户名: <span className="text-slate-200">{story.authorUser.username || '未填写'}</span></div>
+                    <div>邮箱: <span className="text-slate-200">{story.authorUser.email || '未填写'}</span></div>
+                    <div>届别: <span className="text-slate-200">{story.authorUser.graduationClass || '未填写'}</span></div>
+                    <div>班级: <span className="text-slate-200">{story.authorUser.className || '未填写'}</span></div>
                   </div>
                 </div>
               )}
@@ -136,7 +136,7 @@ export default function AdminStoriesPendingPage() {
                   {story.tags.map((tag) => (
                     <span
                       key={tag}
-                      className="rounded-full border border-brand/20 bg-brand/5 px-2.5 py-0.5 text-xs text-brand"
+                      className="rounded-full border border-purple-500/30 bg-purple-500/10 px-2.5 py-0.5 text-xs text-purple-300"
                     >
                       #{tag}
                     </span>
@@ -145,8 +145,8 @@ export default function AdminStoriesPendingPage() {
               )}
 
               {/* 稿件正文 */}
-              <div className="mt-4 rounded-xl border border-brand/10 bg-black/10 p-4.5">
-                <p className="whitespace-pre-wrap text-sm leading-7 text-brand-fg/80 select-text">
+              <div className="mt-4 rounded-xl border border-purple-500/20 bg-slate-950/50 p-4.5 shadow-inner">
+                <p className="whitespace-pre-wrap text-sm leading-7 text-slate-300 select-text">
                   {story.body}
                 </p>
               </div>
