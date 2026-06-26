@@ -49,12 +49,19 @@ export default function AlumniStoriesPage() {
   const [submitting, setSubmitting] = useState(false);
   const [submitSuccess, setSubmitSuccess] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    setLoading(true);
     fetch('/api/stories')
       .then(r => r.json())
-      .then(d => setStories(d.stories || []))
-      .catch(() => {})
+      .then(d => {
+        setStories(d.stories || []);
+        setLoading(false);
+      })
+      .catch(() => {
+        setLoading(false);
+      });
   }, []);
 
   const allTags = useMemo(() => {
