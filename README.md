@@ -173,7 +173,7 @@ npm run create-admin
 ## 📂 项目结构
 
 ```text
-aerospace-alumni-site/
+web_yanchuaner/
 ├── src/
 │   ├── app/                          # Next.js App Router 主阵地
 │   │   ├── (front)/                  # 前台路由组（21 页）

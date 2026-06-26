@@ -103,9 +103,9 @@
 # 在 WSL 终端中执行（首次或每次构建前都要做）
 
 # 1. 复制整个项目目录到 WSL 原生文件系统
-rm -rf ~/alumni-site
-cp -r "/mnt/c/Users/<你的用户名>/Desktop/web_projects/aerospace-alumni-site" ~/alumni-site
-cd ~/alumni-site
+rm -rf ~/web_yanchuaner
+cp -r "/mnt/c/Users/<你的用户名>/Desktop/web_projects/web_yanchuaner" ~/web_yanchuaner
+cd ~/web_yanchuaner
 ```
 
 > ⚠️ **为什么不能直接在 `/mnt/c/...`（Windows 目录）里构建？**  
@@ -114,7 +114,7 @@ cd ~/alumni-site
 ### 3.2 第二阶段：WSL 内安装依赖并构建
 
 ```bash
-cd ~/alumni-site
+cd ~/web_yanchuaner
 
 # 2. 修复权限（Windows cp 过来的文件默认只读）
 chmod -R u+w prisma/
@@ -151,7 +151,7 @@ prisma/                  # Schema + 种子数据源
 ### 3.3 第三阶段：打包
 
 ```bash
-cd ~/alumni-site
+cd ~/web_yanchuaner
 
 # 6. 删掉旧包（tar 不会覆盖已有文件）
 rm -rf deploy deploy.tar.gz
@@ -178,7 +178,7 @@ scp deploy.tar.gz root@<服务器IP>:/tmp/
 
 # 方式二：华为云 ECS → 浏览器 CloudShell 上传
 # 先把 deploy.tar.gz 从 WSL 复制到 Windows 桌面：
-cp ~/alumni-site/deploy.tar.gz "/mnt/c/Users/<你的用户名>/Desktop/"
+cp ~/web_yanchuaner/deploy.tar.gz "/mnt/c/Users/<你的用户名>/Desktop/"
 # 然后浏览器打开华为云控制台 → ECS → 远程登录 → CloudShell → 上传文件
 # 再从 CloudShell scp 到 ECS 本身（如果 CloudShell 和 ECS 在不同节点）
 ```

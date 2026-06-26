@@ -8,7 +8,7 @@
 
 ```bash
 git clone <repo-url>
-cd aerospace-alumni-site
+cd web_yanchuaner
 cp .env.example .env          # 从模板创建环境变量文件
 npm ci                         # 严格按 lockfile 安装依赖
 npm run build                  # V2.0 一键构建（详见第 2 节）
