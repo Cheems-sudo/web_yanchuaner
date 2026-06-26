@@ -9,7 +9,12 @@
 
 - [1. 部署架构概览](#1-部署架构概览)
 - [2. 环境要求](#2-环境要求)
-- [3. 本地构建流程](#3-本地构建流程)
+- [3. 构建流程（Windows → WSL → 服务器）](#3-构建流程windows-开发--wsl-构建--服务器部署)
+  - [3.1 从 Windows 复制项目到 WSL](#31-第一阶段从-windows-复制项目到-wsl)
+  - [3.2 WSL 内安装依赖并构建](#32-第二阶段wsl-内安装依赖并构建)
+  - [3.3 打包](#33-第三阶段打包)
+  - [3.4 上传到服务器](#34-第四阶段上传到服务器)
+  - [3.5 服务器上部署](#35-第五阶段服务器上部署)
 - [4. 服务器初始化](#4-服务器初始化)
 - [5. systemd 服务化](#5-systemd-服务化)
 - [6. Nginx 反向代理](#6-nginx-反向代理)
@@ -85,92 +90,152 @@
 
 ---
 
-## 3. 本地构建流程
+## 3. 构建流程（Windows 开发 → WSL 构建 → 服务器部署）
 
-> ⚠️ **关键：必须在 WSL 或 Linux 环境中构建**（Next.js Standalone 输出依赖 Unix 构建环境）
+本项目的实际开发环境为 **Windows + VS Code**，但 Next.js Standalone 构建**必须在 WSL / Linux 中完成**。以下是完整的四阶段链路。
 
-### 3.1 初次构建
+> ⚠️ **为什么不能直接在 Windows 上 `npm run build`？**  
+> Standalone 输出依赖 Unix 符号链接和原生二进制（`better-sqlite3`、`sharp`、`@next/swc`），Windows 构建产物在上传服务器后无法运行。
+
+### 3.1 第一阶段：从 Windows 复制项目到 WSL
 
 ```bash
-# 1. 克隆仓库
-git clone https://github.com/yanchuaner/web_yanchuaner.git
-cd web_yanchuaner
+# 在 WSL 终端中执行（首次或每次构建前都要做）
 
-# 2. 安装依赖
-npm ci
+# 1. 复制整个项目目录到 WSL 原生文件系统
+rm -rf ~/alumni-site
+cp -r "/mnt/c/Users/<你的用户名>/Desktop/web_projects/aerospace-alumni-site" ~/alumni-site
+cd ~/alumni-site
+```
 
-# 3. 配置环境变量
-cp .env.example .env
-vim .env  # 编辑生产环境变量（见下方模板）
+> ⚠️ **为什么不能直接在 `/mnt/c/...`（Windows 目录）里构建？**  
+> WSL 跨文件系统操作（Windows ↔ ext4）会导致符号链接创建失败和 I/O 性能暴跌，`next build` 在跨文件系统目录下会报错或构建不完整。**必须复制到 WSL 原生目录（`~/`）再构建。**
 
-# 4. 一站式构建（生成→建表→播种→编译）
+### 3.2 第二阶段：WSL 内安装依赖并构建
+
+```bash
+cd ~/alumni-site
+
+# 2. 修复权限（Windows cp 过来的文件默认只读）
+chmod -R u+w prisma/
+
+# 3. 删除 Windows 的 node_modules（原生模块不兼容）
+rm -rf node_modules
+npm install --registry=https://registry.npmmirror.com
+
+# 4. 配置构建环境变量（仅用于构建时的数据库初始化，不是生产 .env）
+cat > .env << 'ENDOFFILE'
+DATABASE_URL="file:./prisma/dev.db"
+SESSION_SECRET="build-temp-key-not-used-in-production"
+APP_URL="http://localhost:3000"
+SITE_URL="http://localhost:3000"
+SITE_NAME="燕中校友数字母港"
+ENDOFFILE
+
+# 5. 一站式构建（生成 Prisma Client → 建表 → 种子数据 → 编译）
+npx prisma generate
 npm run build
 ```
 
-### 3.2 生产环境 `.env` 模板
+> ⚠️ **绝对不能跳过第 3 步**。Windows 的 `better-sqlite3`、`sharp`、`@next/swc` 是 `.dll` 原生二进制，在 Linux 下会报 `invalid ELF header`。必须删掉 `node_modules` 用 Linux 版重装。
 
-```bash
-# 数据库
-DATABASE_URL="file:/var/www/alumni-site/data/prod.db"
+构建成功后会输出：
 
-# 安全密钥（⚠️ 生产环境务必使用随机生成的强密钥）
-SESSION_SECRET="$(openssl rand -hex 32)"
-ACCESS_PASSWORD_HASH="<sha256 hash of your access password>"
-
-# 管理员
-ADMIN_USERNAME="admin"
-ADMIN_PASSWORD_HASH="<sha256 hash of your admin password>"
-
-# 站点
-SITE_URL="https://yanchuaner.cn"
-SITE_NAME="燕中校友数字母港"
-
-# 上传
-UPLOAD_DIR="/var/www/alumni-site/data/uploads"
-
-# 邮件 (Resend)
-RESEND_API_KEY="re_......"
-RESEND_FROM_EMAIL="noreply@yanchuaner.cn"
-
-# 可选：Redis 限流
-UPSTASH_REDIS_REST_URL="https://..."
-UPSTASH_REDIS_REST_TOKEN="..."
+```text
+.next/standalone/        # 自包含运行目录（无需 node_modules）
+.next/static/            # 静态资源（CSS / JS / chunks）
+public/                  # 上传文件 / 图标等
+prisma/                  # Schema + 种子数据源
 ```
 
-### 3.3 构建产物
+### 3.3 第三阶段：打包
 
 ```bash
-# npm run build 执行流程：
-prisma generate          # → node_modules/.prisma/client/
-prisma db push           # → SQLite 建表 / 迁移
-prisma db seed           # → 种子数据注入（幂等）
-next build               # → .next/standalone/
+cd ~/alumni-site
 
-# 产物目录
-.next/standalone/        # ← 自包含运行目录（无需 node_modules）
-.next/static/            # ← 静态资源（CSS/JS/chunks）
-public/                  # ← 上传文件 / 图标等
+# 6. 删掉旧包（tar 不会覆盖已有文件）
+rm -rf deploy deploy.tar.gz
+mkdir -p deploy
+
+# 7. 拷贝部署所需文件
+cp -a .next/standalone/. deploy/
+cp -a .next/static deploy/.next/static
+cp -a public deploy/public
+cp -a prisma deploy/prisma
+cp prisma.config.ts deploy/
+cp -a scripts deploy/scripts
+
+# 8. 打包
+tar -czf deploy.tar.gz deploy/
+ls -lh deploy.tar.gz   # 确认大小（通常 50~150MB）
 ```
 
-### 3.4 打包上传
+### 3.4 第四阶段：上传到服务器
 
 ```bash
-# 在 WSL 中打包
-tar -czf deploy.tar.gz \
-  .next/standalone/ \
-  .next/static/ \
-  public/ \
-  prisma/data/ \
-  .env
+# 方式一：SCP 直传（推荐）
+scp deploy.tar.gz root@<服务器IP>:/tmp/
 
-# 上传到服务器
-scp deploy.tar.gz user@yanchuaner.cn:/tmp/
-
-# 在服务器上解压
-ssh user@yanchuaner.cn
-sudo mkdir -p /var/www/alumni-site
-sudo tar -xzf /tmp/deploy.tar.gz -C /var/www/alumni-site/
+# 方式二：华为云 ECS → 浏览器 CloudShell 上传
+# 先把 deploy.tar.gz 从 WSL 复制到 Windows 桌面：
+cp ~/alumni-site/deploy.tar.gz "/mnt/c/Users/<你的用户名>/Desktop/"
+# 然后浏览器打开华为云控制台 → ECS → 远程登录 → CloudShell → 上传文件
+# 再从 CloudShell scp 到 ECS 本身（如果 CloudShell 和 ECS 在不同节点）
 ```
+
+### 3.5 第五阶段：服务器上部署
+
+```bash
+# SSH 进服务器
+ssh root@<服务器IP>
+
+# === 备份数据库（必须！！） ===
+cp /var/www/alumni-site/data/prod.db \
+  /var/www/alumni-site/backups/prod.db.$(date +%Y%m%d-%H%M%S).pre-deploy
+
+# === 停止服务 ===
+systemctl stop alumni-site
+
+# === 解压新包 ===
+cd /tmp
+rm -rf /tmp/deploy
+tar -xzf deploy.tar.gz
+
+# === 替换旧版本 ===
+rm -rf /var/www/alumni-site/app.old
+mv /var/www/alumni-site/app /var/www/alumni-site/app.old   # 保留旧版本用于快速回滚
+mv /tmp/deploy /var/www/alumni-site/app
+
+# === 链接生产环境变量（不要覆盖线上 .env！） ===
+ln -sf /var/www/alumni-site/.env /var/www/alumni-site/app/.env
+rm -rf /var/www/alumni-site/app/public/uploads
+ln -s /var/www/alumni-site/uploads /var/www/alumni-site/app/public/uploads
+
+# === 修复上传目录循环链接 ===
+rm -f /var/www/alumni-site/uploads/uploads
+
+# === 安装 Prisma CLI（Standalone 包里不含此模块） ===
+cd /var/www/alumni-site/app
+npm install prisma@7.8.0
+
+# === 同步数据库 Schema ===
+DATABASE_URL="file:/var/www/alumni-site/data/prod.db" npx prisma db push
+
+# === 启动服务 ===
+systemctl start alumni-site
+
+# === 验证 ===
+curl -s http://localhost:3000/api/health
+# 期望输出：{"status":"healthy"}
+```
+
+> 💡 **回滚操作**（如果新版本有问题）：
+> ```bash
+> systemctl stop alumni-site
+> mv /var/www/alumni-site/app /var/www/alumni-site/app.broken
+> mv /var/www/alumni-site/app.old /var/www/alumni-site/app
+> systemctl start alumni-site
+> ```
 
 ---
 
