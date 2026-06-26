@@ -140,8 +140,8 @@ export default function AdminContentPage() {
         </h2>
         <div className="grid gap-4 md:grid-cols-2">
           <div>
-            <label className="mb-1 block text-sm font-medium text-brand-fg">标题 *</label>
-            <input type="text" value={form.title} onChange={e => setForm({ ...form, title: e.target.value })} className="input w-full" disabled={saving} />
+            <label htmlFor="title" className="mb-1 block text-sm font-medium text-brand-fg">标题 *</label>
+            <input id="title" type="text" value={form.title} onChange={e => setForm({ ...form, title: e.target.value })} className="input w-full" disabled={saving} />
           </div>
           <div>
             <label className="mb-1 block text-sm font-medium text-brand-fg">图标</label>
@@ -162,26 +162,26 @@ export default function AdminContentPage() {
           </div>
           {isTimeline && (
             <div>
-              <label className="mb-1 block text-sm font-medium text-brand-fg">年份</label>
-              <input type="text" value={form.yearLabel} onChange={e => setForm({ ...form, yearLabel: e.target.value })} className="input w-full" placeholder="如：2022" disabled={saving} />
+              <label htmlFor="yearLabel" className="mb-1 block text-sm font-medium text-brand-fg">年份</label>
+              <input id="yearLabel" type="text" value={form.yearLabel} onChange={e => setForm({ ...form, yearLabel: e.target.value })} className="input w-full" placeholder="如：2022" disabled={saving} />
             </div>
           )}
           <div className="md:col-span-2">
-            <label className="mb-1 block text-sm font-medium text-brand-fg">描述</label>
-            <textarea value={form.description} onChange={e => setForm({ ...form, description: e.target.value })} className="input w-full min-h-[60px]" disabled={saving} />
+            <label htmlFor="description" className="mb-1 block text-sm font-medium text-brand-fg">描述</label>
+            <textarea id="description" value={form.description} onChange={e => setForm({ ...form, description: e.target.value })} className="input w-full min-h-[60px]" disabled={saving} />
           </div>
           <div>
-            <label className="mb-1 block text-sm font-medium text-brand-fg">底部备注</label>
-            <input type="text" value={form.note} onChange={e => setForm({ ...form, note: e.target.value })} className="input w-full" disabled={saving} />
+            <label htmlFor="note" className="mb-1 block text-sm font-medium text-brand-fg">底部备注</label>
+            <input id="note" type="text" value={form.note} onChange={e => setForm({ ...form, note: e.target.value })} className="input w-full" disabled={saving} />
           </div>
           <div>
-            <label className="mb-1 block text-sm font-medium text-brand-fg">跳转链接（可选）</label>
-            <input type="text" value={form.href} onChange={e => setForm({ ...form, href: e.target.value })} className="input w-full" placeholder="/alumni/stories" disabled={saving} />
+            <label htmlFor="href" className="mb-1 block text-sm font-medium text-brand-fg">跳转链接（可选）</label>
+            <input id="href" type="text" value={form.href} onChange={e => setForm({ ...form, href: e.target.value })} className="input w-full" placeholder="/alumni/stories" disabled={saving} />
           </div>
           {form.href && (
             <div>
-              <label className="mb-1 block text-sm font-medium text-brand-fg">按钮文字</label>
-              <input type="text" value={form.actionLabel} onChange={e => setForm({ ...form, actionLabel: e.target.value })} className="input w-full" disabled={saving} />
+              <label htmlFor="actionLabel" className="mb-1 block text-sm font-medium text-brand-fg">按钮文字</label>
+              <input id="actionLabel" type="text" value={form.actionLabel} onChange={e => setForm({ ...form, actionLabel: e.target.value })} className="input w-full" disabled={saving} />
             </div>
           )}
         </div>

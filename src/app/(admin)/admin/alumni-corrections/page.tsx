@@ -161,11 +161,13 @@ export default function AdminAlumniCorrectionsPage() {
 
       {/* 搜索 */}
       <div className="relative">
+        <label htmlFor="search-input" className="sr-only">搜索姓名、联系方式</label>
         <Search
           size={16}
           className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-[#7C3AED]/40"
         />
         <input
+          id="search-input"
           type="text"
           placeholder="搜索姓名、联系方式..."
           value={searchInput}
@@ -195,57 +197,62 @@ export default function AdminAlumniCorrectionsPage() {
             description="校友数据更新后将在此处统一管理与审核"
           />
         ) : (
-          <table className="w-full text-sm">
-            <thead>
-              <tr className="border-b border-[#7C3AED]/10 text-left text-xs text-[#4C1D95]/50">
-                <th className="w-8 px-4 py-3 font-medium" />
-                <th className="px-4 py-3 font-medium">姓名</th>
-                <th className="px-4 py-3 font-medium">联系方式</th>
-                <th className="px-4 py-3 font-medium">状态</th>
-                <th className="px-4 py-3 font-medium">提交时间</th>
-              </tr>
-            </thead>
-            <tbody>
-              {requests.map((req) => {
-                const badge = STATUS_BADGE[req.status];
-                const BadgeIcon = badge.icon;
-                const isExpanded = expandedId === req.id;
-                return (
-                  <tr key={req.id} className="group">
-                    <td className="px-4 py-3">
-                      <button
-                        onClick={() => setExpandedId(isExpanded ? null : req.id)}
-                        className="cursor-pointer rounded p-0.5 text-[#7C3AED]/30 transition hover:text-[#7C3AED]"
-                      >
-                        {isExpanded ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
-                      </button>
-                    </td>
-                    <td className="px-4 py-3 font-medium text-[#4C1D95]">
-                      {req.currentName || '未知'}
-                    </td>
-                    <td className="max-w-[160px] truncate px-4 py-3 text-[#4C1D95]/60">
-                      {req.contact}
-                    </td>
-                    <td className="px-4 py-3">
-                      <span
-                        className={`inline-flex items-center gap-1 rounded-full ${badge.bg} px-2.5 py-0.5 text-xs ${badge.text}`}
-                      >
-                        <BadgeIcon size={12} />
-                        {req.status === 'PENDING'
-                          ? '待审核'
-                          : req.status === 'APPROVED'
-                            ? '已通过'
-                            : '已驳回'}
-                      </span>
-                    </td>
-                    <td className="px-4 py-3 text-xs text-[#4C1D95]/40">
-                      {new Date(req.createdAt).toLocaleString('zh-CN')}
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
+          <div className="overflow-x-auto rounded-2xl border border-[#7C3AED]/10 bg-white/50 backdrop-blur-sm">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="border-b border-[#7C3AED]/10 text-left text-xs text-[#4C1D95]/50">
+                  <th className="w-8 px-4 py-3 font-medium" />
+                  <th className="px-4 py-3 font-medium">姓名</th>
+                  <th className="px-4 py-3 font-medium hidden sm:table-cell">联系方式</th>
+                  <th className="px-4 py-3 font-medium">状态</th>
+                  <th className="px-4 py-3 font-medium hidden md:table-cell">提交时间</th>
+                </tr>
+              </thead>
+              <tbody>
+                {requests.map((req) => {
+                  const badge = STATUS_BADGE[req.status];
+                  const BadgeIcon = badge.icon;
+                  const isExpanded = expandedId === req.id;
+                  return (
+                    <tr key={req.id} className="group">
+                      <td className="px-4 py-3">
+                        <button
+                          onClick={() => setExpandedId(isExpanded ? null : req.id)}
+                          aria-label={isExpanded ? '收起详情' : '展开详情'}
+                          aria-expanded={isExpanded}
+                          aria-controls={`detail-${req.id}`}
+                          className="cursor-pointer rounded p-0.5 text-[#7C3AED]/30 transition hover:text-[#7C3AED] min-h-[32px] min-w-[32px] flex items-center justify-center"
+                        >
+                          {isExpanded ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+                        </button>
+                      </td>
+                      <td className="px-4 py-3 font-medium text-[#4C1D95]">
+                        {req.currentName || '未知'}
+                      </td>
+                      <td className="max-w-[160px] truncate px-4 py-3 text-[#4C1D95]/60 hidden sm:table-cell">
+                        {req.contact}
+                      </td>
+                      <td className="px-4 py-3">
+                        <span
+                          className={`inline-flex items-center gap-1 rounded-full ${badge.bg} px-2.5 py-0.5 text-xs ${badge.text}`}
+                        >
+                          <BadgeIcon size={12} />
+                          {req.status === 'PENDING'
+                            ? '待审核'
+                            : req.status === 'APPROVED'
+                              ? '已通过'
+                              : '已驳回'}
+                        </span>
+                      </td>
+                      <td className="px-4 py-3 text-xs text-[#4C1D95]/40 hidden md:table-cell">
+                        {new Date(req.createdAt).toLocaleString('zh-CN')}
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
         )}
       </div>
 
@@ -268,7 +275,7 @@ export default function AdminAlumniCorrectionsPage() {
           ];
 
           return (
-            <div className="rounded-2xl border border-[#7C3AED]/10 bg-white/80 p-5 backdrop-blur-xl">
+            <div id={`detail-${req.id}`} className="rounded-2xl border border-[#7C3AED]/10 bg-white/80 p-5 backdrop-blur-xl">
               <div className="grid gap-4 md:grid-cols-2">
                 {/* 修改内容对比 */}
                 <div className="space-y-3">
@@ -392,13 +399,14 @@ export default function AdminAlumniCorrectionsPage() {
 
       {/* 审核确认弹窗 */}
       {actionTarget && actionType && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center px-4">
-          <div
-            className="absolute inset-0 bg-[#4C1D95]/20 backdrop-blur-sm"
-            onClick={() => !actionLoading && setActionTarget(null)}
-          />
-          <div className="relative w-full max-w-md rounded-2xl border border-[#7C3AED]/10 bg-white p-6 shadow-xl">
-            <h2 className="font-heading text-lg font-bold text-[#4C1D95]">
+        <div 
+          className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/60 backdrop-blur-sm px-4 pb-safe sm:pb-4 animate-fade-in"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="confirm-dialog-title"
+        >
+          <div className="w-full max-w-md rounded-modal border border-line bg-surface p-6 shadow-lg backdrop-blur-md mb-4 sm:mb-0 animate-slide-in sm:animate-fade-in">
+            <h2 id="confirm-dialog-title" className="font-heading text-lg font-bold text-[#4C1D95]">
               {actionType === 'approve' ? '通过并应用修改' : '驳回申请'}
             </h2>
             <p className="mt-1 text-sm text-[#4C1D95]/60">
@@ -408,10 +416,11 @@ export default function AdminAlumniCorrectionsPage() {
             </p>
 
             <div className="mt-4">
-              <label className="mb-1 block text-sm font-medium text-[#4C1D95]">
+              <label htmlFor="adminNote" className="mb-1 block text-sm font-medium text-[#4C1D95]">
                 管理员备注（可选）
               </label>
               <textarea
+                id="adminNote"
                 value={adminNote}
                 onChange={(e) => setAdminNote(e.target.value)}
                 className="input w-full min-h-[80px] resize-y"
@@ -428,18 +437,18 @@ export default function AdminAlumniCorrectionsPage() {
               </div>
             )}
 
-            <div className="mt-5 flex justify-end gap-3">
+            <div className="mt-5 flex flex-col-reverse sm:flex-row justify-end gap-3">
               <button
                 onClick={() => setActionTarget(null)}
                 disabled={actionLoading}
-                className="cursor-pointer rounded-xl border border-gray-200 px-4 py-2 text-sm text-[#4C1D95]/60 transition hover:bg-gray-50 disabled:opacity-50"
+                className="w-full sm:w-auto min-h-[44px] sm:min-h-0 cursor-pointer rounded-xl border border-gray-200 px-4 py-2 text-sm text-[#4C1D95]/60 transition hover:bg-gray-50 disabled:opacity-50"
               >
                 取消
               </button>
               <button
                 onClick={handleAction}
                 disabled={actionLoading}
-                className={`inline-flex cursor-pointer items-center gap-1.5 rounded-xl border px-4 py-2 text-sm disabled:opacity-50 ${
+                className={`inline-flex w-full sm:w-auto min-h-[44px] sm:min-h-0 cursor-pointer items-center justify-center gap-1.5 rounded-xl border px-4 py-2 text-sm disabled:opacity-50 ${
                   actionType === 'approve'
                     ? 'border-emerald-200 bg-emerald-50 text-emerald-700 hover:bg-emerald-100'
                     : 'border-rose-200 bg-rose-50 text-rose-600 hover:bg-rose-100'

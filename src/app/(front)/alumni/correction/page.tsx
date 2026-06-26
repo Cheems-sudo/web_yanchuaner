@@ -191,7 +191,7 @@ export default function AlumniCorrectionPage() {
 
         {!selected && (
           <>
-            <div className="mt-6 flex gap-3">
+            <div className="mt-6 flex flex-col sm:flex-row gap-3">
               <div className="relative flex-1">
                 <Search size={16} className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-brand-fg/40" />
                 <input
@@ -204,7 +204,7 @@ export default function AlumniCorrectionPage() {
                   autoFocus
                 />
               </div>
-              <Button onClick={handleSearch} disabled={searching} className="gap-1.5 shrink-0" variant="secondary">
+              <Button onClick={handleSearch} disabled={searching} className="gap-1.5 w-full sm:w-auto shrink-0" variant="secondary">
                 {searching ? <Loader2 size={16} className="animate-spin" /> : <Search size={16} />}
                 搜索
               </Button>
@@ -227,7 +227,7 @@ export default function AlumniCorrectionPage() {
                   <div className="space-y-2">
                     <p className="text-xs text-brand-fg/40">找到 {results.length} 条记录</p>
                     {results.map((item) => (
-                      <div key={item.id} className="flex items-center justify-between gap-3 rounded-card border border-line bg-surface/50 px-4 py-3 transition hover:bg-brand/5">
+                      <div key={item.id} className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 rounded-card border border-line bg-surface/50 px-4 py-3 transition hover:bg-brand/5">
                         <div className="min-w-0 flex-1">
                           <p className="text-sm font-medium text-brand-fg">{item.name}</p>
                           <p className="mt-0.5 text-xs text-brand-fg/50">
@@ -235,7 +235,7 @@ export default function AlumniCorrectionPage() {
                             {item.university && ` · ${item.university}`}{item.city && ` · ${item.city}`}
                           </p>
                         </div>
-                        <Button onClick={() => openForm(item)} variant="secondary" size="sm" className="shrink-0">
+                        <Button onClick={() => openForm(item)} variant="secondary" size="sm" className="w-full sm:w-auto shrink-0">
                           申请修改
                         </Button>
                       </div>
@@ -323,11 +323,11 @@ export default function AlumniCorrectionPage() {
               </div>
             )}
 
-            <div className="flex items-center gap-3">
-              <Button onClick={() => setSelected(null)} disabled={submitting} variant="secondary">
+            <div className="flex flex-col-reverse sm:flex-row items-center gap-3">
+              <Button onClick={() => setSelected(null)} disabled={submitting} variant="secondary" className="w-full sm:w-auto min-h-[44px]">
                 返回
               </Button>
-              <Button onClick={handleSubmit} disabled={submitting} className="gap-1.5" variant="primary">
+              <Button onClick={handleSubmit} disabled={submitting} className="gap-1.5 w-full sm:w-auto min-h-[44px]" variant="primary">
                 {submitting ? <Loader2 size={16} className="animate-spin" /> : <Send size={16} />}
                 提交申请
               </Button>
@@ -342,7 +342,7 @@ export default function AlumniCorrectionPage() {
             </div>
             <h2 className="font-heading mt-4 text-lg font-bold text-brand-fg">申请已提交</h2>
             <p className="mt-2 text-sm text-brand-fg/60">修改申请已提交，请等待管理员审核。审核通过后信息将自动更新。</p>
-            <div className="mt-6 flex justify-center gap-3">
+            <div className="mt-6 flex flex-col sm:flex-row justify-center gap-3">
               <Button
                 onClick={() => {
                   setSelected(null);
@@ -352,10 +352,11 @@ export default function AlumniCorrectionPage() {
                   setQuery('');
                 }}
                 variant="secondary"
+                className="w-full sm:w-auto min-h-[44px]"
               >
                 继续修改其他校友
               </Button>
-              <ButtonLink href="/" variant="primary">
+              <ButtonLink href="/" variant="primary" className="w-full sm:w-auto min-h-[44px]">
                 返回首页
               </ButtonLink>
             </div>

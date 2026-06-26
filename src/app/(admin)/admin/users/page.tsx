@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { ShieldCheck, UserCheck, UserX, Users } from 'lucide-react';
 import { useAuth } from '@/components/AuthProvider';
 import { AdminPageShell } from '@/components/admin/AdminPageShell';
-import { EmptyState } from '@/components/ui';
+import { EmptyState, ResponsiveTabs } from '@/components/ui';
 import { toast } from 'sonner';
 
 type UserRecord = {
@@ -96,21 +96,15 @@ export default function AdminUsersPage() {
       <div className="space-y-4">
 
       {/* Filter tabs */}
-      <div className="mb-4 flex gap-2">
-        {filters.map((f) => (
-          <button
-            key={f}
-            onClick={() => setStatusFilter(f)}
-            className={`rounded-lg border px-3 py-1.5 text-xs transition cursor-pointer ${
-              statusFilter === f
-                ? 'border-[#7C3AED]/50 bg-[#7C3AED]/10 text-[#7C3AED]'
-                : 'border-gray-200 text-[#4C1D95]/60 hover:border-[#7C3AED]/30'
-            }`}
-          >
-            {f === 'ALL' ? '全部' : f === 'PENDING' ? '待审核' : f === 'VERIFIED' ? '已认证' : '已驳回'}
-          </button>
-        ))}
-      </div>
+      <ResponsiveTabs
+        tabs={filters.map((f) => ({
+          id: f,
+          label: f === 'ALL' ? '全部' : f === 'PENDING' ? '待审核' : f === 'VERIFIED' ? '已认证' : '已驳回',
+        }))}
+        activeTab={statusFilter}
+        onChange={setStatusFilter}
+        className="mb-4"
+      />
 
       {error && (
         <div className="mb-4 rounded-xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-700">
@@ -119,7 +113,20 @@ export default function AdminUsersPage() {
       )}
 
       {loading ? (
-        <div className="flex items-center justify-center py-20 text-[#4C1D95]/60">加载中...</div>
+        <div className="space-y-3">
+          {[1, 2, 3, 4, 5].map((i) => (
+            <div key={i} className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 rounded-card border border-line bg-surface/30 p-4 animate-pulse">
+              <div className="flex-1 space-y-2 w-full">
+                <div className="h-4 w-24 rounded bg-brand/20" />
+                <div className="h-3 w-40 rounded bg-brand/10" />
+              </div>
+              <div className="flex gap-2 w-full sm:w-auto">
+                <div className="h-8 w-16 rounded bg-brand/15" />
+                <div className="h-8 w-16 rounded bg-brand/15" />
+              </div>
+            </div>
+          ))}
+        </div>
       ) : users.length === 0 ? (
         <EmptyState
           icon={Users}
@@ -132,10 +139,10 @@ export default function AdminUsersPage() {
             <thead className="border-b border-[#7C3AED]/10 text-[#4C1D95]/60">
               <tr>
                 <th className="px-4 py-3 font-medium">姓名</th>
-                <th className="px-4 py-3 font-medium">账号</th>
+                <th className="px-4 py-3 font-medium hidden md:table-cell">账号</th>
                 <th className="px-4 py-3 font-medium">届别/班级</th>
-                <th className="px-4 py-3 font-medium">邮箱状态</th>
-                <th className="px-4 py-3 font-medium">角色</th>
+                <th className="px-4 py-3 font-medium hidden md:table-cell">邮箱状态</th>
+                <th className="px-4 py-3 font-medium hidden md:table-cell">角色</th>
                 <th className="px-4 py-3 font-medium">状态</th>
                 <th className="px-4 py-3 font-medium">操作</th>
               </tr>
@@ -145,29 +152,38 @@ export default function AdminUsersPage() {
                 <tr key={user.id} className="text-[#4C1D95]/70 transition hover:bg-[#7C3AED]/5">
                   <td className="px-4 py-3">
                     <p className="font-medium text-[#4C1D95]">{user.name || '-'}</p>
+                    {/* On mobile, show account details as subtext in the name cell */}
+                    <p className="text-xxs text-[#4C1D95]/50 md:hidden mt-0.5">
+                      {user.username || '旧资料'} • {user.email || '-'}
+                    </p>
                   </td>
-                  <td className="px-4 py-3">
+                  <td className="px-4 py-3 hidden md:table-cell">
                     <p>{user.username || '旧资料'}</p>
                     <p className="text-xs">{user.email || '-'}</p>
                   </td>
                   <td className="px-4 py-3">{[user.graduationClass, user.className].filter(Boolean).join(' / ') || '-'}</td>
-                  <td className="px-4 py-3">{user.emailVerified ? '已验证' : '未验证'}</td>
-                  <td className="px-4 py-3">{user.role}</td>
-                  <td className="px-4 py-3">{statusBadge(user.status)}<p className="mt-1 text-xs">{user.accountStatus}</p></td>
+                  <td className="px-4 py-3 hidden md:table-cell">{user.emailVerified ? '已验证' : '未验证'}</td>
+                  <td className="px-4 py-3 hidden md:table-cell">{user.role}</td>
+                  <td className="px-4 py-3">
+                    {statusBadge(user.status)}
+                    <p className="mt-1 text-xs">{user.accountStatus}</p>
+                    {/* On mobile, show role as subtext */}
+                    <p className="mt-0.5 text-xxs text-[#4C1D95]/50 md:hidden font-semibold">角色: {user.role}</p>
+                  </td>
                   <td className="px-4 py-3">
                     {user.id === currentUser?.id ? (
                       <span className="inline-block text-xs font-semibold text-[#4C1D95]/60 bg-gray-100 border border-gray-200 rounded-full px-2.5 py-0.5">
                         当前账号
                       </span>
                     ) : (
-                      <div className="flex gap-2">
+                      <div className="flex gap-2 flex-wrap">
                         {user.status === 'PENDING' && (
                           <>
                             <button
                               disabled={user.role === 'ADMIN' && !currentUser?.isRoot}
                               title={user.role === 'ADMIN' && !currentUser?.isRoot ? "无权操作其他管理员" : undefined}
                               onClick={() => runAction(user.id, 'approve-alumni')}
-                              className="inline-flex items-center gap-1 rounded-lg border border-emerald-200 bg-emerald-50 px-2.5 py-1 text-xs text-emerald-700 transition hover:bg-emerald-100 cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-emerald-50"
+                              className="inline-flex items-center gap-1 rounded-lg border border-emerald-200 bg-emerald-50 px-2.5 py-1 text-xs text-emerald-700 transition hover:bg-emerald-100 cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-emerald-50 min-h-[32px]"
                             >
                               <UserCheck size={14} />
                               通过
@@ -176,7 +192,7 @@ export default function AdminUsersPage() {
                               disabled={user.role === 'ADMIN' && !currentUser?.isRoot}
                               title={user.role === 'ADMIN' && !currentUser?.isRoot ? "无权操作其他管理员" : undefined}
                               onClick={() => runAction(user.id, 'reject-alumni')}
-                              className="inline-flex items-center gap-1 rounded-lg border border-rose-200 bg-rose-50 px-2.5 py-1 text-xs text-rose-700 transition hover:bg-rose-100 cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-rose-50"
+                              className="inline-flex items-center gap-1 rounded-lg border border-rose-200 bg-rose-50 px-2.5 py-1 text-xs text-rose-700 transition hover:bg-rose-100 cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-rose-50 min-h-[32px]"
                             >
                               <UserX size={14} />
                               驳回
@@ -188,7 +204,7 @@ export default function AdminUsersPage() {
                             disabled={user.role === 'ADMIN'}
                             title={user.role === 'ADMIN' ? "请先撤销该用户的管理员权限" : undefined}
                             onClick={() => runAction(user.id, 'reject-alumni')}
-                            className="inline-flex items-center gap-1 rounded-lg border border-rose-200 bg-rose-50 px-2.5 py-1 text-xs text-rose-700 transition hover:bg-rose-100 cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-rose-50"
+                            className="inline-flex items-center gap-1 rounded-lg border border-rose-200 bg-rose-50 px-2.5 py-1 text-xs text-rose-700 transition hover:bg-rose-100 cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-rose-50 min-h-[32px]"
                           >
                             <UserX size={14} />
                             撤销
@@ -199,7 +215,7 @@ export default function AdminUsersPage() {
                             disabled={user.role === 'ADMIN' && !currentUser?.isRoot}
                             title={user.role === 'ADMIN' && !currentUser?.isRoot ? "无权操作其他管理员" : undefined}
                             onClick={() => runAction(user.id, 'approve-alumni')}
-                            className="inline-flex items-center gap-1 rounded-lg border border-emerald-200 bg-emerald-50 px-2.5 py-1 text-xs text-emerald-700 transition hover:bg-emerald-100 cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-emerald-50"
+                            className="inline-flex items-center gap-1 rounded-lg border border-emerald-200 bg-emerald-50 px-2.5 py-1 text-xs text-emerald-700 transition hover:bg-emerald-100 cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-emerald-50 min-h-[32px]"
                           >
                             <UserCheck size={14} />
                             重新通过
@@ -209,7 +225,7 @@ export default function AdminUsersPage() {
                           disabled={user.role === 'ADMIN' && !currentUser?.isRoot}
                           title={user.role === 'ADMIN' && !currentUser?.isRoot ? "无权操作其他管理员" : undefined}
                           onClick={() => runAction(user.id, user.accountStatus === 'ACTIVE' ? 'disable-account' : 'enable-account')}
-                          className="rounded-lg border border-gray-200 bg-white px-2.5 py-1 text-xs text-[#4C1D95]/70 transition hover:bg-gray-50 cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-white"
+                          className="rounded-lg border border-gray-200 bg-white px-2.5 py-1 text-xs text-[#4C1D95]/70 transition hover:bg-gray-50 cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-white min-h-[32px]"
                         >
                           {user.accountStatus === 'ACTIVE' ? '停用' : '启用'}
                         </button>
@@ -217,7 +233,7 @@ export default function AdminUsersPage() {
                           user.role === 'ADMIN' ? (
                             <button
                               onClick={() => runAction(user.id, 'revoke-admin')}
-                              className="inline-flex items-center gap-1 rounded-lg border border-gray-200 bg-gray-50 px-2.5 py-1 text-xs text-gray-500 transition hover:bg-gray-100 hover:text-gray-700 cursor-pointer"
+                              className="inline-flex items-center gap-1 rounded-lg border border-gray-200 bg-gray-50 px-2.5 py-1 text-xs text-gray-500 transition hover:bg-gray-100 hover:text-gray-700 cursor-pointer min-h-[32px]"
                             >
                               <ShieldCheck size={14} className="text-gray-400" />
                               撤销管理员
@@ -225,7 +241,7 @@ export default function AdminUsersPage() {
                           ) : (
                             <button
                               onClick={() => runAction(user.id, 'grant-admin')}
-                              className="inline-flex items-center gap-1 rounded-lg border border-violet-200 bg-violet-50 px-2.5 py-1 text-xs text-violet-700 transition hover:bg-violet-100 cursor-pointer"
+                              className="inline-flex items-center gap-1 rounded-lg border border-violet-200 bg-violet-50 px-2.5 py-1 text-xs text-violet-700 transition hover:bg-violet-100 cursor-pointer min-h-[32px]"
                             >
                               <ShieldCheck size={14} />
                               提升为管理员

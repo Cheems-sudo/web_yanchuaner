@@ -86,7 +86,7 @@ export default function UniversityMapPage() {
           {/* Loading state */}
           {loading && (
             <div className="space-y-6">
-              <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+              <div className="grid gap-4 grid-cols-2 lg:grid-cols-4">
                 {[1, 2, 3, 4].map((i) => (
                   <div key={i} className="animate-pulse rounded-2xl border border-line bg-surface/20 p-5">
                     <div className="h-10 w-10 rounded-xl bg-surface/30" />
@@ -128,7 +128,7 @@ export default function UniversityMapPage() {
           {data && data.cities.length > 0 && (
             <>
               {/* Stats grid */}
-              <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+              <div className="grid gap-4 grid-cols-2 lg:grid-cols-4">
                 {statCards.map(({ icon: Icon, label, value, color, border, bg }) => (
                   <div key={label} className={`rounded-2xl border ${border} ${bg} p-5 shadow-sm`}>
                     <div className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-brand/10 shadow-sm border border-brand/20">
@@ -182,29 +182,51 @@ export default function UniversityMapPage() {
                       </button>
 
                       {expandedCity === city.city && (
-                        <div className="border-t border-brand/5 bg-white/30 px-4 py-4 md:px-5">
+                        <div className="border-t border-brand/5 bg-white/30 px-3 py-3 md:px-5 md:py-4">
                           {city.members.length > 0 ? (
-                            <div className="overflow-hidden rounded-xl border border-brand/10 bg-white/70">
-                              <div className="grid grid-cols-[1.05fr_1.25fr_1fr_0.9fr] gap-3 border-b border-brand/10 bg-brand/5 px-4 py-3 text-xs font-medium text-gray-500">
-                                <span>姓名</span>
-                                <span>大学</span>
-                                <span>专业</span>
-                                <span>班级</span>
-                              </div>
-                              <div className="divide-y divide-brand/5">
+                            <>
+                              {/* 移动端卡片布局 */}
+                              <div className="space-y-2 md:hidden">
                                 {city.members.map((member) => (
                                   <div
                                     key={`${member.name}-${member.graduationClass}-${member.university}-${member.major}`}
-                                    className="grid grid-cols-[1.05fr_1.25fr_1fr_0.9fr] gap-3 px-4 py-3 text-sm text-gray-700"
+                                    className="rounded-xl border border-brand/10 bg-white/60 p-3 text-xs space-y-1.5"
                                   >
-                                    <span className="font-medium text-[#4C1D95]">{member.name}</span>
-                                    <span>{member.university || '暂无'}</span>
-                                    <span>{member.major || '暂无'}</span>
-                                    <span>{member.graduationClass || '暂无'}</span>
+                                    <div className="flex justify-between items-center">
+                                      <span className="font-semibold text-sm text-[#4C1D95]">{member.name}</span>
+                                      <span className="text-[#4C1D95]/60 font-semibold">{member.graduationClass || '暂无班级'}</span>
+                                    </div>
+                                    <div className="text-gray-500 flex justify-between gap-2 flex-wrap">
+                                      <span>大学: {member.university || '暂无'}</span>
+                                      <span>专业: {member.major || '暂无'}</span>
+                                    </div>
                                   </div>
                                 ))}
                               </div>
-                            </div>
+
+                              {/* 桌面端表格布局 */}
+                              <div className="hidden md:block overflow-hidden rounded-xl border border-brand/10 bg-white/70">
+                                <div className="grid grid-cols-[1.05fr_1.25fr_1fr_0.9fr] gap-3 border-b border-brand/10 bg-brand/5 px-4 py-3 text-xs font-medium text-gray-500">
+                                  <span>姓名</span>
+                                  <span>大学</span>
+                                  <span>专业</span>
+                                  <span>班级</span>
+                                </div>
+                                <div className="divide-y divide-brand/5">
+                                  {city.members.map((member) => (
+                                    <div
+                                      key={`${member.name}-${member.graduationClass}-${member.university}-${member.major}`}
+                                      className="grid grid-cols-[1.05fr_1.25fr_1fr_0.9fr] gap-3 px-4 py-3 text-sm text-gray-700"
+                                    >
+                                      <span className="font-medium text-[#4C1D95]">{member.name}</span>
+                                      <span>{member.university || '暂无'}</span>
+                                      <span>{member.major || '暂无'}</span>
+                                      <span>{member.graduationClass || '暂无'}</span>
+                                    </div>
+                                  ))}
+                                </div>
+                              </div>
+                            </>
                           ) : (
                             <div className="rounded-xl border border-dashed border-brand/10 bg-white/70 px-4 py-4 text-sm text-gray-400">
                               暂无明细数据

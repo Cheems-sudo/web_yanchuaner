@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { CheckCircle, XCircle, FileText, Trash2 } from 'lucide-react';
 import { AdminPageShell } from '@/components/admin/AdminPageShell';
-import { EmptyState } from '@/components/ui';
+import { EmptyState, ResponsiveTabs } from '@/components/ui';
 import { toast } from 'sonner';
 
 type PostRecord = {
@@ -98,6 +98,10 @@ export default function AdminPostsPage() {
   };
 
   const filters = ['PENDING', 'PUBLISHED', 'REJECTED', 'DRAFT'];
+  const tabItems = filters.map((f) => ({
+    id: f,
+    label: statusLabel[f] || f,
+  }));
 
   return (
     <AdminPageShell
@@ -106,21 +110,12 @@ export default function AdminPostsPage() {
     >
       <div className="space-y-4">
         {/* Filter tabs */}
-        <div className="mb-4 flex gap-2">
-          {filters.map((f) => (
-            <button
-              key={f}
-              onClick={() => setStatusFilter(f)}
-              className={`rounded-btn border px-3 py-1.5 text-xs transition cursor-pointer ${
-                statusFilter === f
-                  ? 'border-brand bg-brand/10 text-brand'
-                  : 'border-line text-brand-fg/60 hover:border-brand/30 hover:bg-brand/5'
-              }`}
-            >
-              {statusLabel[f]}
-            </button>
-          ))}
-        </div>
+        <ResponsiveTabs
+          tabs={tabItems}
+          activeTab={statusFilter}
+          onChange={setStatusFilter}
+          className="mb-4"
+        />
 
         {error && (
           <div className="mb-4 rounded-card border border-rose-500/20 bg-rose-500/10 px-4 py-3 text-sm text-rose-400">
@@ -129,7 +124,15 @@ export default function AdminPostsPage() {
         )}
 
         {loading ? (
-          <div className="flex items-center justify-center py-20 text-brand-fg/60">加载中...</div>
+          <div className="flex items-center justify-center py-20 text-brand-fg/60">
+            <div className="flex flex-col items-center gap-3">
+              <span className="relative flex h-8 w-8">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-8 w-8 bg-brand/50"></span>
+              </span>
+              <span className="text-xs font-semibold font-heading animate-pulse">加载中...</span>
+            </div>
+          </div>
         ) : posts.length === 0 ? (
           <EmptyState
             icon={FileText}
@@ -142,8 +145,8 @@ export default function AdminPostsPage() {
               <thead className="border-b border-line text-brand-fg/60">
                 <tr>
                   <th className="px-4 py-3 font-medium">标题</th>
-                  <th className="px-4 py-3 font-medium">类型</th>
-                  <th className="px-4 py-3 font-medium">作者</th>
+                  <th className="px-4 py-3 font-medium hidden sm:table-cell">类型</th>
+                  <th className="px-4 py-3 font-medium hidden sm:table-cell">作者</th>
                   <th className="px-4 py-3 font-medium">状态</th>
                   <th className="px-4 py-3 font-medium">操作</th>
                 </tr>
@@ -152,8 +155,8 @@ export default function AdminPostsPage() {
                 {posts.map((post) => (
                   <tr key={post.id} className="text-brand-fg/70 transition hover:bg-brand/5">
                     <td className="px-4 py-3 font-medium text-brand-fg">{post.title}</td>
-                    <td className="px-4 py-3">{typeLabel[post.type] || post.type}</td>
-                    <td className="px-4 py-3">{post.author?.name || '-'}</td>
+                    <td className="px-4 py-3 hidden sm:table-cell">{typeLabel[post.type] || post.type}</td>
+                    <td className="px-4 py-3 hidden sm:table-cell">{post.author?.name || '-'}</td>
                     <td className="px-4 py-3">{statusBadge(post.status)}</td>
                     <td className="px-4 py-3">
                       <div className="flex gap-2">
@@ -161,14 +164,14 @@ export default function AdminPostsPage() {
                           <>
                             <button
                               onClick={() => updatePost(post.id, 'PUBLISHED')}
-                              className="inline-flex items-center gap-1 rounded-btn border border-emerald-500/20 bg-emerald-500/10 px-2.5 py-1 text-xs text-emerald-400 transition hover:bg-emerald-500/20 cursor-pointer"
+                              className="inline-flex items-center gap-1 rounded-btn border border-emerald-500/20 bg-emerald-500/10 px-2.5 py-1 text-xs text-emerald-400 transition hover:bg-emerald-500/20 cursor-pointer min-h-[32px]"
                             >
                               <CheckCircle size={14} />
                               发布
                             </button>
                             <button
                               onClick={() => updatePost(post.id, 'REJECTED')}
-                              className="inline-flex items-center gap-1 rounded-btn border border-rose-500/20 bg-rose-500/10 px-2.5 py-1 text-xs text-rose-400 transition hover:bg-rose-500/20 cursor-pointer"
+                              className="inline-flex items-center gap-1 rounded-btn border border-rose-500/20 bg-rose-500/10 px-2.5 py-1 text-xs text-rose-400 transition hover:bg-rose-500/20 cursor-pointer min-h-[32px]"
                             >
                               <XCircle size={14} />
                               驳回
@@ -178,7 +181,7 @@ export default function AdminPostsPage() {
                         {post.status === 'PUBLISHED' && (
                           <button
                             onClick={() => updatePost(post.id, 'REJECTED')}
-                            className="inline-flex items-center gap-1 rounded-btn border border-rose-500/20 bg-rose-500/10 px-2.5 py-1 text-xs text-rose-400 transition hover:bg-rose-500/20 cursor-pointer"
+                            className="inline-flex items-center gap-1 rounded-btn border border-rose-500/20 bg-rose-500/10 px-2.5 py-1 text-xs text-rose-400 transition hover:bg-rose-500/20 cursor-pointer min-h-[32px]"
                           >
                             <XCircle size={14} />
                             下架
@@ -187,7 +190,7 @@ export default function AdminPostsPage() {
                         {post.status === 'REJECTED' && (
                           <button
                             onClick={() => updatePost(post.id, 'PUBLISHED')}
-                            className="inline-flex items-center gap-1 rounded-btn border border-emerald-500/20 bg-emerald-500/10 px-2.5 py-1 text-xs text-emerald-400 transition hover:bg-emerald-500/20 cursor-pointer"
+                            className="inline-flex items-center gap-1 rounded-btn border border-emerald-500/20 bg-emerald-500/10 px-2.5 py-1 text-xs text-emerald-400 transition hover:bg-emerald-500/20 cursor-pointer min-h-[32px]"
                           >
                             <CheckCircle size={14} />
                             重新发布
@@ -195,7 +198,7 @@ export default function AdminPostsPage() {
                         )}
                         <button
                           onClick={() => setConfirmDelete(post)}
-                          className="inline-flex items-center gap-1 rounded-btn border border-rose-500/20 bg-rose-500/10 px-2.5 py-1 text-xs text-rose-400 transition hover:bg-rose-500/20 cursor-pointer"
+                          className="inline-flex items-center gap-1 rounded-btn border border-rose-500/20 bg-rose-500/10 px-2.5 py-1 text-xs text-rose-400 transition hover:bg-rose-500/20 cursor-pointer min-h-[32px]"
                         >
                           <Trash2 size={14} />
                           删除
@@ -212,24 +215,29 @@ export default function AdminPostsPage() {
 
       {/* 删除确认弹窗 */}
       {confirmDelete && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm px-4">
-          <div className="w-full max-w-md rounded-modal border border-line bg-surface p-6 shadow-lg backdrop-blur-md">
-            <h3 className="text-lg font-semibold text-brand font-heading">确认删除</h3>
+        <div 
+          className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/60 backdrop-blur-sm px-4 pb-safe sm:pb-4"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="delete-confirm-title"
+        >
+          <div className="w-full max-w-md rounded-modal border border-line bg-surface p-6 shadow-lg backdrop-blur-md mb-4 sm:mb-0 animate-slide-in sm:animate-fade-in">
+            <h3 id="delete-confirm-title" className="text-lg font-semibold text-brand font-heading">确认删除</h3>
             <p className="mt-3 text-sm leading-6 text-brand-fg/70">
               确定删除投稿《{confirmDelete.title}》（{confirmDelete.author?.name || '未知作者'}）吗？此操作不可撤销。
             </p>
-            <div className="mt-5 flex justify-end gap-3">
+            <div className="mt-5 flex flex-col-reverse sm:flex-row justify-end gap-3">
               <button
                 onClick={() => { setConfirmDelete(null); setDeleting(null); }}
                 disabled={!!deleting}
-                className="rounded-btn border border-line bg-surface/50 px-4 py-2 text-sm text-brand-fg/70 transition hover:bg-brand/5 hover:text-brand cursor-pointer"
+                className="w-full sm:w-auto min-h-[44px] sm:min-h-0 rounded-btn border border-line bg-surface/50 px-4 py-2 text-sm text-brand-fg/70 transition hover:bg-brand/5 hover:text-brand cursor-pointer"
               >
                 取消
               </button>
               <button
                 onClick={handleDelete}
                 disabled={!!deleting}
-                className="inline-flex items-center gap-2 rounded-btn border border-rose-500/20 bg-rose-500/10 px-4 py-2 text-sm text-rose-400 transition hover:bg-rose-500/20 cursor-pointer disabled:opacity-50"
+                className="inline-flex w-full sm:w-auto min-h-[44px] sm:min-h-0 items-center justify-center gap-2 rounded-btn border border-rose-500/20 bg-rose-500/10 px-4 py-2 text-sm text-rose-400 transition hover:bg-rose-500/20 cursor-pointer disabled:opacity-50"
               >
                 {deleting ? '删除中...' : '确认删除'}
               </button>
