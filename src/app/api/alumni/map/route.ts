@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/db';
 import { getCachedOrFetch } from '@/lib/cache';
 import { requireVerifiedAlumni } from '@/lib/admin-auth';
-import { parseTags } from '@/lib/tags';
 
 export async function GET(req: NextRequest) {
   const auth = await requireVerifiedAlumni(req);
@@ -13,20 +12,16 @@ export async function GET(req: NextRequest) {
         select: {
           name: true,
           graduationClass: true,
-          tags: true,
           city: true,
         },
         orderBy: { name: 'asc' },
       });
 
-      const alumni = records.map((r) => {
-        const city = r.city || parseTags(r.tags).city;
-        return {
-          name: r.name,
-          graduationClass: r.graduationClass,
-          city: city || '未知',
-        };
-      });
+      const alumni = records.map((r) => ({
+        name: r.name,
+        graduationClass: r.graduationClass,
+        city: r.city || '未知',
+      }));
 
       return { alumni, total: alumni.length };
     });

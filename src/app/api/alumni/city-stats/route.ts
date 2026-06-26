@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/db';
 import { requireVerifiedAlumni } from '@/lib/admin-auth';
 import { getCityCoords } from '@/data/cityCoordinates';
-import { parseTags } from '@/lib/tags';
 
 export const dynamic = 'force-dynamic';
 
@@ -15,7 +14,6 @@ export async function GET(req: NextRequest) {
       select: {
         name: true,
         graduationClass: true,
-        tags: true,
         city: true,
         university: true,
         major: true,
@@ -38,16 +36,9 @@ export async function GET(req: NextRequest) {
     let uncounted = 0;
 
     for (const r of records) {
-      let city = r.city || null;
-      let university = r.university || null;
-      let major = r.major || null;
-
-      if (!city || !university || !major) {
-        const parsed = parseTags(r.tags);
-        if (!city) city = parsed.city;
-        if (!university) university = parsed.university;
-        if (!major) major = parsed.major;
-      }
+      const city = r.city || null;
+      const university = r.university || null;
+      const major = r.major || null;
 
       if (!city) { uncounted++; continue; }
 
@@ -70,8 +61,8 @@ export async function GET(req: NextRequest) {
       if (r.graduationClass) entry.classes.add(r.graduationClass);
       entry.members.push({
         name: r.name,
-        university,
-        major,
+        university: university || '',
+        major: major || '',
         graduationClass: r.graduationClass || '',
       });
     }

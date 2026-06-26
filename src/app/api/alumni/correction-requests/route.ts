@@ -78,7 +78,7 @@ export async function POST(req: NextRequest) {
     const hasDiff =
       (requestedName && requestedName !== roster.name) ||
       (requestedGraduationClass && requestedGraduationClass !== (roster.graduationClass || "")) ||
-      (requestedTags && requestedTags !== (roster.tags || ""));
+      (requestedTags && requestedTags !== [roster.university, roster.major, roster.city].filter(Boolean).join(' | '));
     if (!hasDiff) {
       return NextResponse.json(
         { error: "修改内容与当前信息相同，请检查后重新提交" },
@@ -102,7 +102,7 @@ export async function POST(req: NextRequest) {
         rosterId,
         currentName: roster.name,
         currentGraduationClass: roster.graduationClass,
-        currentTags: roster.tags,
+        currentTags: [roster.university, roster.major, roster.city].filter(Boolean).join(' | '),
         requestedName,
         requestedGraduationClass,
         requestedTags,

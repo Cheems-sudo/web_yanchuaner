@@ -20,10 +20,8 @@ import { JoinTriggerButton } from "@/components/JoinRequestModal";
 import LatestUpdatesSection, {
   LatestUpdatesSkeleton,
 } from "@/components/LatestUpdatesSection";
-import storiesData from "@/data/stories.json";
 import { getCachedOrFetch } from "@/lib/cache";
 import prisma from "@/lib/db";
-import { parseTags } from "@/lib/tags";
 import { getPageUser } from "@/lib/admin-auth";
 
 const AlumniMap = nextDynamic(() => import("@/components/AlumniMap"), {
@@ -109,7 +107,11 @@ async function computeDashboardStats() {
   try {
     return await getCachedOrFetch("home:dashboard:stats", 60, async () => {
       const rows = await prisma.whitelistRoster.findMany({
-        select: { tags: true },
+        select: { city: true },
+      });
+
+      const storyCount = await prisma.story.count({
+        where: { status: "PUBLISHED" },
       });
 
       const alumniCount = rows.length;
@@ -117,21 +119,21 @@ async function computeDashboardStats() {
       const unknownCitySet = new Set(["", "待完善", "待补充", "未知城市", "未知"]);
       const citySet = new Set<string>();
       for (const row of rows) {
-        const { city } = parseTags(row.tags || "");
-        if (city && !unknownCitySet.has(city)) {
-          citySet.add(city);
+
+        if (row.city && !unknownCitySet.has(row.city)) {
+          citySet.add(row.city);
         }
       }
 
       return {
         alumniCount,
         cityCount: citySet.size,
-        storyCount: storiesData.length,
+        storyCount,
       };
     });
   } catch (error) {
     console.error("首页数据查询失败", error);
-    return { alumniCount: 0, cityCount: 0, storyCount: storiesData.length };
+    return { alumniCount: 0, cityCount: 0, storyCount: 0 };
   }
 }
 

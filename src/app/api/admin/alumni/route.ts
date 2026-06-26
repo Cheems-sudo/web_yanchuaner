@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/db";
 import { requireAdmin } from "@/lib/admin-auth";
-import { normalizeTags } from "@/lib/tags";
 import { upsertRosterEntry } from "@/lib/roster";
 import { readJsonBody } from "@/lib/auth-utils";
 
@@ -30,10 +29,13 @@ export async function GET(req: NextRequest) {
       andConditions.push({
         OR: [
           { name: { contains: q } },
-          { tags: { contains: q } },
           { graduationClass: { contains: q } },
           { className: { contains: q } },
           { email: { contains: q } },
+          { city: { contains: q } },
+          { university: { contains: q } },
+          { major: { contains: q } },
+          { industry: { contains: q } },
         ],
       });
     }
@@ -75,7 +77,10 @@ export async function POST(req: NextRequest) {
       className?: unknown;
       email?: unknown;
       contact?: unknown;
-      tags?: unknown;
+      city?: unknown;
+      university?: unknown;
+      major?: unknown;
+      industry?: unknown;
       certificateNo?: unknown;
     }>(req, 16384); // 16KB limit
 
@@ -84,7 +89,10 @@ export async function POST(req: NextRequest) {
     const className = typeof body.className === "string" ? body.className.trim() : "";
     const email = typeof body.email === "string" ? body.email.trim().toLowerCase() : "";
     const contact = typeof body.contact === "string" ? body.contact.trim() : "";
-    const tags = typeof body.tags === "string" ? normalizeTags(body.tags.trim()) : "";
+    const city = typeof body.city === "string" ? body.city.trim() : "";
+    const university = typeof body.university === "string" ? body.university.trim() : "";
+    const major = typeof body.major === "string" ? body.major.trim() : "";
+    const industry = typeof body.industry === "string" ? body.industry.trim() : "";
     const certificateNo = typeof body.certificateNo === "string" ? body.certificateNo.trim() : "";
 
     if (!name || name.length > 50) {
@@ -111,12 +119,6 @@ export async function POST(req: NextRequest) {
     if (contact && !/^\d{11}$/.test(contact)) {
       return NextResponse.json({ error: "联系方式需为11位手机号" }, { status: 400 });
     }
-    if (tags && tags.length > 500) {
-      return NextResponse.json(
-        { error: "标签长度不超过500字" },
-        { status: 400 },
-      );
-    }
     if (certificateNo && certificateNo.length > 50) {
       return NextResponse.json(
         { error: "证书编号长度不超过50字" },
@@ -130,7 +132,10 @@ export async function POST(req: NextRequest) {
       className,
       email,
       contact,
-      tags,
+      city: city || null,
+      university: university || null,
+      major: major || null,
+      industry: industry || null,
       certificateNo,
     });
 

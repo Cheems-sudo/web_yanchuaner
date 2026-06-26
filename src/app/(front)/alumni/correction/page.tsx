@@ -8,7 +8,6 @@ type AlumniResult = {
   id: string;
   name: string;
   graduationClass: string;
-  tags: string;
   university: string;
   major: string;
   city: string;
@@ -61,7 +60,7 @@ export default function AlumniCorrectionPage() {
     setSelected(item);
     setRequestedName(item.name);
     setRequestedClass(item.graduationClass);
-    setRequestedTags(item.tags);
+    setRequestedTags([item.university, item.major, item.city].filter(Boolean).join(' | '));
     setContact('');
     setReason('');
     setFormError('');
@@ -89,7 +88,7 @@ export default function AlumniCorrectionPage() {
       setFormError('请至少填写一项要修改的内容');
       return;
     }
-    if (newName === selected.name && newClass === selected.graduationClass && newTags === selected.tags) {
+    if (newName === selected.name && newClass === selected.graduationClass && newTags === [selected.university, selected.major, selected.city].filter(Boolean).join(' | ')) {
       setFormError('修改内容与当前信息相同，请检查后重新提交');
       return;
     }

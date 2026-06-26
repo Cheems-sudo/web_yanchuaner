@@ -98,7 +98,6 @@ export async function PATCH(
             ...(request.requestedGraduationClass
               ? { graduationClass: request.requestedGraduationClass }
               : {}),
-            ...(request.requestedTags ? { tags: request.requestedTags } : {}),
           },
         }),
       ]);

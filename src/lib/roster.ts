@@ -8,7 +8,6 @@ export type RosterWrite = {
   className?: string | null;
   email?: string | null;
   contact?: string | null;
-  tags?: string | null;
   certificateNo?: string | null;
   city?: string | null;
   university?: string | null;
@@ -38,7 +37,6 @@ export async function upsertRosterEntry(
     const entry = await client.whitelistRoster.update({
       where: { id: existing.id },
       data: {
-        ...(input.tags !== undefined ? { tags: optional(input.tags) } : {}),
         ...(input.contact !== undefined ? { contact: optional(input.contact) } : {}),
         ...(input.certificateNo !== undefined
           ? { certificateNo: optional(input.certificateNo) }
@@ -56,7 +54,6 @@ export async function upsertRosterEntry(
     data: {
       ...identity,
       contact: optional(input.contact),
-      tags: optional(input.tags),
       certificateNo: optional(input.certificateNo),
       city: optional(input.city),
       university: optional(input.university),
